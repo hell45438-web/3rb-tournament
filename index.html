@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3rB CHAMPIONS ARENA</title>
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Kufi+Arabic:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'Noto Kufi Arabic', 'sans-serif'],
+          },
+          colors: {
+            accent: '#FFB700',
+            darkBg: '#08080C',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Absolute Box-Sizing & Viewport Precision */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: #08080C;
+      color: #F3F4F6;
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: 'Outfit', 'Noto Kufi Arabic', sans-serif;
+    }
+
+    /* Enhanced Ultra-Vibrant Glassmorphism Panels */
+    .glass-card {
+      background: rgba(10, 10, 10, 0.88);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+    }
+
+    /* Solid Gold Active Status Action Buttons */
+    .btn-gold {
+      background: #FFB700;
+      color: #08080C;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 0 25px rgba(255, 183, 0, 0.65), 0 5px 15px rgba(0, 0, 0, 0.4);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-gold:hover {
+      background: #FFFFFF;
+      color: #000000;
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.9), 0 5px 20px rgba(0, 0, 0, 0.5);
+      transform: translateY(-2px);
+    }
+    .btn-gold:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    /* Elegant Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.3);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 183, 0, 0.4);
+      border-radius: 5px;
+      border: 2px solid #08080C;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 183, 0, 0.8);
+    }
+
+    /* Perfect Text Shadows for Flawless Readability Over Image/Video */
+    .text-shadow-heading {
+      text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.95);
+    }
+
+    /* RTL Layout Direction Flippers */
+    [dir="rtl"] .rtl-flip {
+      transform: scaleX(-1);
+    }
+  </style>
+</head>
+<body class="relative transition-all duration-700 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070');">
+
+  <!-- Interactive Backdrop Shade Filter -->
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-xs pointer-events-none z-0"></div>
+
+  <!-- MAIN WRAPPER -->
+  <div class="relative z-10 flex flex-col min-height-screen">
+    
+    <!-- HEADER (Strict Horizontal Spaced Layout Away from Edges) -->
+    <header class="w-full flex items-center justify-between p-[15px_20px] md:p-[20px_40px]">
+      <!-- Left side: Language Pill & Live Status -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center rounded-full p-0.5 border border-white/20 bg-black/70 backdrop-blur-md">
+          <button onclick="setLanguage('en')" id="lang-en-btn" class="px-3.5 py-1.5 text-xs font-black uppercase rounded-full transition-all duration-300">
+            EN
+          </button>
+          <button onclick="setLanguage('ar')" id="lang-ar-btn" class="px-3.5 py-1.5 text-xs font-black uppercase rounded-full transition-all duration-300">
+            AR
+          </button>
+        </div>
+        <div class="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] uppercase font-black tracking-wider text-accent border border-accent/30 bg-black/70 backdrop-blur-md">
+          <span class="h-2 w-2 rounded-full bg-accent animate-pulse"></span>
+          <span id="badge-status">REGISTRATION</span>
+        </div>
+      </div>
+
+      <!-- Right side: Clean Typography Brand Layout -->
+      <div class="flex items-center gap-2.5">
+        <span id="header-series" class="hidden sm:inline text-[10px] font-mono text-white/50 uppercase tracking-[0.25em] font-bold">
+          CHAMPIONSHIP SERIES
+        </span>
+        <span class="text-3xl font-extrabold italic tracking-tighter text-white text-shadow-heading">
+          3rB<span class="text-accent">.</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- HERO INTRODUCTION SECTION -->
+    <section class="text-center px-4 py-8 md:py-12 flex flex-col items-center">
+      <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold italic tracking-tight text-white uppercase text-shadow-heading mb-3">
+        3rB CHAMPIONS <span class="text-accent">ARENA</span>
+      </h1>
+      <p id="hero-subtitle" class="max-w-2xl text-sm sm:text-base text-gray-200 font-semibold tracking-wide text-shadow-heading leading-relaxed mb-6">
+        Register, submit your inside game credentials, and follow live scores directly synchronized across the globe.
+      </p>
+
+      <!-- Stats Pill Grid -->
+      <div class="flex flex-wrap justify-center gap-3 text-xs mb-10">
+        <div class="flex items-center gap-2 rounded-xl border border-white/20 bg-black/80 px-4 py-2 text-gray-100 shadow-md">
+          <i data-lucide="trophy" class="h-4 w-4 text-accent"></i>
+          <span>
+            <strong id="stats-count" class="text-white font-black">0</strong> 
+            <span id="stats-label">Champions Joined</span>
+          </span>
+        </div>
+        <div class="flex items-center gap-2 rounded-xl border border-white/20 bg-black/80 px-4 py-2 text-gray-100 shadow-md">
+          <i data-lucide="calendar" class="h-4 w-4 text-accent"></i>
+          <span>
+            <span id="status-label">Status:</span> 
+            <strong id="status-val" class="text-accent font-black uppercase">LIVE REGISTRATION</strong>
+          </span>
+        </div>
+        <button onclick="openAdminModal()" class="flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 hover:bg-white/20 transition px-4 py-2 text-white font-bold shadow-md cursor-pointer">
+          <i data-lucide="settings" class="h-4 w-4"></i>
+          <span id="btn-admin-portal">Admin Portal</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- CONTENT PORTAL (REGISTRATION & LEADERBOARD GRID) -->
+    <main class="w-full max-w-7xl mx-auto px-4 md:px-8 pb-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT COLUMN: REGISTRATION FORM CARD -->
+      <div class="lg:col-span-5 glass-card rounded-3xl p-6 sm:p-8 relative">
+        <div class="text-center mb-6">
+          <h2 id="form-title" class="text-2xl font-black tracking-wider text-white mb-2 uppercase italic text-shadow-heading">
+            JOIN THE FIGHT
+          </h2>
+          <p id="form-subtitle" class="text-xs text-gray-200 font-medium">
+            Fill in your exact details to join the championship dashboard.
+          </p>
+        </div>
+
+        <!-- Alert messages -->
+        <div id="alert-container" class="hidden mb-4 p-4 rounded-xl text-xs font-bold leading-relaxed"></div>
+
+        <form id="reg-form" onsubmit="handleRegistrationSubmit(event)" class="space-y-4">
+          <!-- IGN -->
+          <div class="space-y-1.5">
+            <label id="lbl-ign" class="text-[10px] uppercase font-black text-gray-200 tracking-wider flex items-center gap-1.5">
+              <i data-lucide="user" class="h-3.5 w-3.5 text-accent"></i>
+              In Game Name (IGN) <span class="text-red-500">*</span>
+            </label>
+            <input type="text" id="input-ign" required placeholder="e.g., ShadowSlayer" class="w-full rounded-xl border border-white/20 bg-black/60 px-4 py-3 text-sm text-white placeholder-gray-400 focus:border-accent focus:bg-black focus:outline-none focus:ring-2 focus:ring-accent/40 transition">
+          </div>
+
+          <!-- Player ID -->
+          <div class="space-y-1.5">
+            <label id="lbl-id" class="text-[10px] uppercase font-black text-gray-200 tracking-wider flex items-center gap-1.5">
+              <i data-lucide="hash" class="h-3.5 w-3.5 text-accent"></i>
+              Player ID <span class="text-red-500">*</span>
+            </label>
+            <input type="text" id="input-id" required placeholder="e.g., 58493729" class="w-full rounded-xl border border-white/20 bg-black/60 px-4 py-3 text-sm text-white placeholder-gray-400 focus:border-accent focus:bg-black focus:outline-none focus:ring-2 focus:ring-accent/40 transition">
+          </div>
+
+          <!-- Discord -->
+          <div class="space-y-1.5">
+            <label id="lbl-discord" class="text-[10px] uppercase font-black text-gray-200 tracking-wider flex items-center gap-1.5">
+              <i data-lucide="disc" class="h-3.5 w-3.5 text-accent"></i>
+              Discord Username <span class="text-red-500">*</span>
+            </label>
+            <input type="text" id="input-discord" required placeholder="e.g., warrior#1234" class="w-full rounded-xl border border-white/20 bg-black/60 px-4 py-3 text-sm text-white placeholder-gray-400 focus:border-accent focus:bg-black focus:outline-none focus:ring-2 focus:ring-accent/40 transition">
+          </div>
+
+          <!-- SCREENSHOT FILE UPLOAD (Converts to Base64) -->
+          <div class="space-y-1.5">
+            <label id="lbl-screenshot" class="text-[10px] uppercase font-black text-gray-200 tracking-wider flex items-center gap-1.5">
+              <i data-lucide="image" class="h-3.5 w-3.5 text-accent"></i>
+              In-Game Screenshot Proof <span class="text-red-500">*</span>
+            </label>
+            
+            <div id="drop-zone" class="relative flex flex-col items-center justify-center border-2 border-dashed border-white/20 hover:border-accent/50 bg-black/50 hover:bg-black/75 rounded-2xl p-6 transition-all text-center cursor-pointer">
+              <input type="file" id="file-input" required accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
+              <i data-lucide="upload-cloud" class="h-8 w-8 text-accent mb-2"></i>
+              <span id="txt-drag" class="text-xs font-black text-white uppercase tracking-wider mb-1">Drag & Drop Here</span>
+              <span id="txt-browse" class="text-[10px] text-gray-300">or click to browse device</span>
+            </div>
+            
+            <div id="preview-container" class="hidden flex items-center gap-3 p-2 bg-white/5 border border-white/10 rounded-xl">
+              <img id="img-preview" src="" class="w-12 h-12 rounded-lg object-cover border border-white/20">
+              <div class="flex-1 min-w-0">
+                <p id="file-name" class="text-xs text-white font-bold truncate"></p>
+                <p id="file-size" class="text-[10px] text-gray-400"></p>
+              </div>
+              <button type="button" onclick="clearUpload()" class="p-1 hover:bg-white/10 text-red-400 rounded-lg"><i data-lucide="trash-2" class="h-4 w-4"></i></button>
+            </div>
+
+            <p id="txt-helper" class="text-[10px] text-gray-300 italic leading-relaxed pt-1">
+              * Must upload screenshot showing profile to prevent fake logins. File is securely synchronized.
+            </p>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="btn-submit" class="w-full py-4 mt-4 btn-gold rounded-xl flex items-center justify-center gap-2">
+            SUBMIT ENTRY
+          </button>
+        </form>
+      </div>
+
+      <!-- RIGHT COLUMN: CHAMPIONS LEADERBOARD GRID -->
+      <div class="lg:col-span-7 glass-card rounded-3xl p-6 sm:p-8">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+          <div class="text-center sm:text-left">
+            <h2 id="ldr-title" class="text-2xl font-black italic tracking-wider text-white uppercase text-shadow-heading">
+              ARENA LEADERBOARD
+            </h2>
+            <p id="ldr-subtitle" class="text-xs text-gray-200">
+              Real-time scores sorted by points from active tournament battles.
+            </p>
+          </div>
+
+          <!-- Search Input -->
+          <div class="relative w-full sm:w-64">
+            <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Search champions..." class="w-full rounded-xl border border-white/20 bg-black/60 py-2.5 pl-10 pr-4 text-xs text-white placeholder-gray-400 focus:border-accent focus:outline-none transition">
+            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300"></i>
+          </div>
+        </div>
+
+        <!-- Leaderboard Rows Container -->
+        <div id="leaderboard-rows" class="space-y-3 max-h-[580px] overflow-y-auto pr-1">
+          <!-- Dynamically populated rows -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADMIN PASS MODAL -->
+  <div id="admin-auth-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
+    <div class="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 relative">
+      <button onclick="closeAdminModal()" class="absolute top-4 right-4 rounded-xl border border-white/20 bg-black/60 p-2 text-gray-300 hover:text-white cursor-pointer">
+        <i data-lucide="x" class="h-4 w-4"></i>
+      </button>
+
+      <div class="flex flex-col items-center text-center mb-6">
+        <div class="h-12 w-12 rounded-2xl bg-accent/20 border border-white/20 flex items-center justify-center text-accent mb-3 shadow-lg">
+          <i data-lucide="lock" class="h-5 w-5"></i>
+        </div>
+        <h3 id="admin-auth-title" class="text-xl font-black tracking-wider text-white uppercase italic text-shadow-heading">
+          VERIFY ORGANIZER IDENTITY
+        </h3>
+        <p id="admin-auth-desc" class="text-xs text-gray-200 mt-1">
+          Please enter password to gain access to score management panel.
+        </p>
+      </div>
+
+      <form onsubmit="handleAdminAuth(event)" class="space-y-4">
+        <div class="space-y-1.5">
+          <label id="lbl-pass" class="text-[10px] uppercase font-black text-gray-200">Organizer Password</label>
+          <input type="password" id="admin-pass" required placeholder="Enter passcode" class="w-full rounded-xl border border-white/20 bg-black/60 px-4 py-3 text-sm text-white placeholder-gray-500 focus:border-accent focus:outline-none transition">
+        </div>
+        <div id="admin-auth-error" class="hidden text-xs font-bold text-red-400 text-center bg-red-950/40 p-2 rounded-lg border border-red-500/20"></div>
+        <button type="submit" id="btn-auth-submit" class="w-full py-3.5 btn-gold rounded-xl">
+          ACCESS CONTROL PANEL
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FULL ADMIN PANEL CONTROL MODAL -->
+  <div id="admin-panel-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 z-50">
+    <div class="glass-card w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl p-6 sm:p-8 relative">
+      <button onclick="closeAdminPanel()" class="absolute top-4 right-4 rounded-xl border border-white/20 bg-black/60 p-2 text-gray-300 hover:text-white cursor-pointer z-10">
+        <i data-lucide="x" class="h-4 w-4"></i>
+      </button>
+
+      <div class="flex items-center gap-3 border-b border-white/10 pb-4 mb-6">
+        <div class="h-10 w-10 rounded-xl bg-accent/20 flex items-center justify-center text-accent">
+          <i data-lucide="shield-alert" class="h-5 w-5"></i>
+        </div>
+        <div>
+          <h3 id="panel-title" class="text-xl font-black text-white uppercase tracking-wider text-shadow-heading">ORGANIZER CONTROL CENTER</h3>
+          <p id="panel-desc" class="text-xs text-gray-300">Grade matches, manage configurations, and oversee centralized registration records.</p>
+        </div>
+      </div>
+
+      <!-- Quick Setup Settings Inside Panel -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <!-- Live Database Connector -->
+        <div class="rounded-2xl border border-white/10 bg-black/60 p-4 space-y-2">
+          <label class="text-[10px] font-black uppercase text-accent tracking-widest flex items-center gap-1.5">
+            <i data-lucide="database" class="h-3.5 w-3.5"></i>
+            GOOGLE SHEETS LIVE SCRIPT URL
+          </label>
+          <input type="text" id="script-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full rounded-xl border border-white/20 bg-black px-3 py-2 text-xs text-white placeholder-gray-600 focus:border-accent focus:outline-none font-mono">
+          <button onclick="saveScriptUrl()" class="px-4 py-1.5 bg-accent hover:bg-white text-black font-black text-[10px] rounded-lg tracking-wider transition uppercase shadow-md cursor-pointer">
+            SAVE CONNECTOR
+          </button>
+        </div>
+
+        <!-- Layout Theme Manager -->
+        <div class="rounded-2xl border border-white/10 bg-black/60 p-4 space-y-2">
+          <label class="text-[10px] font-black uppercase text-accent tracking-widest flex items-center gap-1.5">
+            <i data-lucide="image" class="h-3.5 w-3.5"></i>
+            CUSTOM ARENA BACKDROP URL
+          </label>
+          <input type="text" id="bg-url-input" placeholder="Paste image URL (e.g. Unsplash/Imgur)" class="w-full rounded-xl border border-white/20 bg-black px-3 py-2 text-xs text-white placeholder-gray-600 focus:border-accent focus:outline-none">
+          <button onclick="saveBackgroundUrl()" class="px-4 py-1.5 bg-accent hover:bg-white text-black font-black text-[10px] rounded-lg tracking-wider transition uppercase shadow-md cursor-pointer">
+            APPLY ARENA THEME
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Player Management Table -->
+      <div class="overflow-x-auto w-full mb-6">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-white/10 text-gray-400 font-black uppercase tracking-wider text-[10px]">
+              <th class="py-3 px-4">Champion</th>
+              <th class="py-3 px-4">Proof Screen</th>
+              <th class="py-3 px-4 text-center">Current Score (0-10)</th>
+              <th class="py-3 px-4 text-center">Score Grade Slider</th>
+              <th class="py-3 px-4 text-right">Administrative</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body" class="divide-y divide-white/5">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Action Panel Bottom Row -->
+      <div class="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6">
+        <button onclick="bulkSaveScores()" class="px-8 py-3.5 btn-gold rounded-xl text-xs font-black tracking-widest cursor-pointer">
+          SYNC ALL GRADES TO GOOGLE SHEET
+        </button>
+        
+        <div class="flex items-center gap-2">
+          <button onclick="bulkSyncFromSheet()" class="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wide border border-white/10 transition cursor-pointer">
+            Force Pull Sheet Data
+          </button>
+          <button onclick="resetAllRecords()" class="px-5 py-3 rounded-xl bg-red-600/20 hover:bg-red-600/40 text-red-300 font-bold text-xs uppercase tracking-wide border border-red-500/20 transition cursor-pointer">
+            RESET ALL TOURNAMENT RECORDS
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYER DETAIL PROFILE MODAL (Includes Base64 proof popup review) -->
+  <div id="player-profile-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
+    <div class="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 relative">
+      <button onclick="closeProfileModal()" class="absolute top-4 right-4 rounded-xl border border-white/20 bg-black/60 p-2 text-gray-300 hover:text-white cursor-pointer">
+        <i data-lucide="x" class="h-4 w-4"></i>
+      </button>
+
+      <div class="flex flex-col items-center text-center">
+        <div class="h-16 w-16 rounded-full bg-accent/20 border border-accent flex items-center justify-center text-accent mb-4 relative overflow-hidden">
+          <i data-lucide="user" class="h-8 w-8"></i>
+        </div>
+        
+        <h3 id="prof-ign" class="text-3xl font-black italic tracking-tighter text-white uppercase text-shadow-heading mb-1">---</h3>
+        <p id="prof-tag" class="text-xs text-accent font-bold mb-6">---</p>
+
+        <div class="w-full space-y-3 text-left mb-6">
+          <div class="flex items-center justify-between rounded-xl bg-black/50 p-3.5 border border-white/10">
+            <span class="text-[10px] font-black text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="hash" class="h-3.5 w-3.5 text-accent"></i> Player ID
+            </span>
+            <span id="prof-id" class="text-xs font-bold text-white font-mono">---</span>
+          </div>
+
+          <div class="flex items-center justify-between rounded-xl bg-black/50 p-3.5 border border-white/10">
+            <span class="text-[10px] font-black text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="star" class="h-3.5 w-3.5 text-accent"></i> MATCH POINT SCORE
+            </span>
+            <span id="prof-score" class="text-xs font-black text-white">0 / 10</span>
+          </div>
+
+          <!-- Proof Image Review Container -->
+          <div class="rounded-xl bg-black/50 p-4 border border-white/10 space-y-2">
+            <span class="text-[10px] font-black text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="shield-check" class="h-3.5 w-3.5 text-accent"></i> Verified Inside-Game Screenshot
+            </span>
+            <img id="prof-img" src="" class="w-full h-40 rounded-lg object-cover border border-white/15 shadow-inner">
+          </div>
+        </div>
+
+        <button onclick="closeProfileModal()" class="w-full py-3.5 btn-gold rounded-xl text-xs font-black tracking-widest cursor-pointer">
+          CLOSE ACCOUNT PROFILE
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS & LIVE DATABASE ENGINE -->
+  <script>
+    // Live DB Connector Endpoint
+    let SCRIPT_URL = localStorage.getItem('3rb_custom_script_url') || '';
+
+    // Standard Translation Dictionary
+    const dictionary = {
+      en: {
+        badgeStatusReg: "REGISTRATION",
+        badgeStatusLdr: "LEADERBOARD ACTIVE",
+        heroSubtitle: "Register, submit your inside game credentials, and follow live scores directly synchronized across the globe.",
+        joined: "Champions Joined",
+        status: "Status:",
+        regFormTitle: "JOIN THE FIGHT",
+        regFormSubtitle: "Fill in your exact details to join the championship dashboard.",
+        ldrTitle: "ARENA LEADERBOARD",
+        ldrSubtitle: "Real-time scores sorted by points from active tournament battles.",
+        successMsg: "🎉 Entry Submitted Successfully! Organizer will grade your credentials soon.",
+        duplicateMsg: "⚠️ You are already registered! Check the Arena Leaderboard."
+      },
+      ar: {
+        badgeStatusReg: "التسجيل مفتوح",
+        badgeStatusLdr: "لوحة الصدارة نشطة",
+        heroSubtitle: "سجل بياناتك، أرفق لقطة الشاشة لإثبات حسابك، وتابع الترتيب والنقاط بشكل مباشر ومتزامن مع الجميع.",
+        joined: "الأبطال المسجلين",
+        status: "الحالة:",
+        regFormTitle: "انضم إلى المعركة",
+        regFormSubtitle: "أدخل معلوماتك بدقة للانضمام فوراً للوحة البيانات الرسمية.",
+        ldrTitle: "لوحة صدارة الأبطال",
+        ldrSubtitle: "النقاط والترتيب المباشر بناءً على تقييمات المنظمين في ساحة المعركة.",
+        successMsg: "🎉 تم إرسال طلبك بنجاح! سيقوم المنظم بمراجعة لقطة الشاشة وإدخال نقاطك.",
+        duplicateMsg: "⚠️ هذا الحساب مسجل بالفعل! ابحث عن اسمك في لوحة الصدارة."
+      }
+    };
+
+    let currentLanguage = localStorage.getItem('3rb_language') || 'en';
+    let players = [];
+    let uploadedBase64 = '';
+
+    // Initialize Page
+    function init() {
+      // Load stored custom background if any
+      const savedBg = localStorage.getItem('3rb_custom_bg_url');
+      if (savedBg) {
+        document.body.style.backgroundImage = `url('${savedBg}')`;
+      }
+      
+      // Update config panel inputs
+      document.getElementById('script-url-input').value = SCRIPT_URL;
+      document.getElementById('bg-url-input').value = savedBg || '';
+
+      setLanguage(currentLanguage);
+      fetchLiveRecords();
+      lucide.createIcons();
+
+      // Start background polling to ensure everyone sees the same sheet updates
+      setInterval(fetchLiveRecords, 10000);
+    }
+
+    // Set Language (EN/AR Toggle)
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      localStorage.setItem('3rb_language', lang);
+      
+      const dir = lang === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+      document.documentElement.lang = lang;
+
+      // Handle translation UI updates
+      const t = dictionary[lang];
+      document.getElementById('hero-subtitle').innerText = t.heroSubtitle;
+      document.getElementById('stats-label').innerText = t.joined;
+      document.getElementById('status-label').innerText = t.status;
+      document.getElementById('form-title').innerText = t.regFormTitle;
+      document.getElementById('form-subtitle').innerText = t.regFormSubtitle;
+      document.getElementById('ldr-title').innerText = t.ldrTitle;
+      document.getElementById('ldr-subtitle').innerText = t.ldrSubtitle;
+
+      // Toggle Active Classes on Lang Pill
+      const enBtn = document.getElementById('lang-en-btn');
+      const arBtn = document.getElementById('lang-ar-btn');
+      if (lang === 'en') {
+        enBtn.className = "px-3.5 py-1.5 text-xs font-black bg-accent text-black rounded-full transition-all duration-300 shadow-md";
+        arBtn.className = "px-3.5 py-1.5 text-xs font-black text-white/60 hover:text-white rounded-full transition-all duration-300";
+      } else {
+        arBtn.className = "px-3.5 py-1.5 text-xs font-black bg-accent text-black rounded-full transition-all duration-300 shadow-md";
+        enBtn.className = "px-3.5 py-1.5 text-xs font-black text-white/60 hover:text-white rounded-full transition-all duration-300";
+      }
+
+      // Re-populate list to update language labels
+      populateLeaderboard();
+    }
+
+    // Image file handler -> Converts to Base64 String
+    const fileInput = document.getElementById('file-input');
+    const dropZone = document.getElementById('drop-zone');
+    const previewContainer = document.getElementById('preview-container');
+    const imgPreview = document.getElementById('img-preview');
+    const fileName = document.getElementById('file-name');
+    const fileSize = document.getElementById('file-size');
+
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) handleFileConversion(file);
+    });
+
+    function handleFileConversion(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('File must be an image!');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        uploadedBase64 = e.target.result;
+        imgPreview.src = uploadedBase64;
+        fileName.innerText = file.name;
+        fileSize.innerText = (file.size / 1024).toFixed(1) + ' KB';
+        
+        dropZone.classList.add('hidden');
+        previewContainer.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearUpload() {
+      uploadedBase64 = '';
+      fileInput.value = '';
+      dropZone.classList.remove('hidden');
+      previewContainer.classList.add('hidden');
+    }
+
+    // Fetch live entries from connected Google Sheet Web App Script
+    async function fetchLiveRecords() {
+      if (!SCRIPT_URL) return;
+      try {
+        const res = await fetch(SCRIPT_URL);
+        if (!res.ok) throw new Error('Network error');
+        const data = await res.json();
+        if (data && Array.isArray(data.players)) {
+          players = data.players;
+          populateLeaderboard();
+          updateStatsAndBadge();
+        }
+      } catch (err) {
+        console.error('Google Sheet background fetch failed:', err);
+      }
+    }
+
+    // Save configurations
+    function saveScriptUrl() {
+      const url = document.getElementById('script-url-input').value.trim();
+      SCRIPT_URL = url;
+      localStorage.setItem('3rb_custom_script_url', url);
+      alert('Google Sheets Web App Script Connection Established!');
+      fetchLiveRecords();
+    }
+
+    function saveBackgroundUrl() {
+      const url = document.getElementById('bg-url-input').value.trim();
+      if (url) {
+        document.body.style.backgroundImage = `url('${url}')`;
+        localStorage.setItem('3rb_custom_bg_url', url);
+        alert('Custom Background Applied Successfully!');
+      } else {
+        localStorage.removeItem('3rb_custom_bg_url');
+        document.body.style.backgroundImage = "url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070')";
+        alert('Reset to Default Arena Background!');
+      }
+    }
+
+    function updateStatsAndBadge() {
+      document.getElementById('stats-count').innerText = players.length;
+      
+      const badge = document.getElementById('badge-status');
+      const val = document.getElementById('status-val');
+      const hasScores = players.some(p => p.score > 0);
+
+      const statusText = hasScores 
+        ? (currentLanguage === 'en' ? 'LEADERBOARD ACTIVE' : 'لوحة الصدارة نشطة')
+        : (currentLanguage === 'en' ? 'LIVE REGISTRATION' : 'التسجيل مفتوح');
+
+      badge.innerText = statusText;
+      val.innerText = statusText;
+    }
+
+    // Form registration submit to Google Sheets API
+    async function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      
+      const ign = document.getElementById('input-ign').value.trim();
+      const pid = document.getElementById('input-id').value.trim();
+      const discord = document.getElementById('input-discord').value.trim();
+      const btn = document.getElementById('btn-submit');
+      const alertContainer = document.getElementById('alert-container');
+
+      if (!uploadedBase64) {
+        alert('Please drag or upload your proof screenshot!');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = currentLanguage === 'en' ? 'TRANSMITTING...' : 'جاري الإرسال...';
+
+      if (!SCRIPT_URL) {
+        // Offline Fallback logic
+        const duplicate = players.some(p => p.playerId === pid || p.inGameName.toLowerCase() === ign.toLowerCase());
+        if (duplicate) {
+          showAlert('duplicate');
+          btn.disabled = false;
+          btn.innerText = currentLanguage === 'en' ? 'SUBMIT ENTRY' : 'إرسال المعلومات';
+          return;
+        }
+
+        const fallbackPlayer = {
+          id: Math.random().toString(36).substr(2, 9),
+          playerId: pid,
+          inGameName: ign,
+          discordTag: discord,
+          avatarUrl: uploadedBase64,
+          score: 0,
+          createdAt: Date.now()
+        };
+        players.unshift(fallbackPlayer);
+        localStorage.setItem('3rb_fallback_players', JSON.stringify(players));
+        populateLeaderboard();
+        updateStatsAndBadge();
+        showAlert('success');
+        resetForm();
+        btn.disabled = false;
+        btn.innerText = currentLanguage === 'en' ? 'SUBMIT ENTRY' : 'إرسال المعلومات';
+        return;
+      }
+
+      // Live Google Sheets API Submit
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'register',
+            inGameName: ign,
+            playerId: pid,
+            discordTag: discord,
+            avatarUrl: uploadedBase64
+          })
+        });
+
+        const data = await response.json();
+        if (data.status === 'success') {
+          showAlert('success');
+          resetForm();
+          fetchLiveRecords();
+        } else if (data.message === 'duplicate') {
+          showAlert('duplicate');
+        } else {
+          alert('Submission failed: ' + (data.message || 'unknown error'));
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Server Connection Error. Check your Script URL and internet.');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = currentLanguage === 'en' ? 'SUBMIT ENTRY' : 'إرسال المعلومات';
+      }
+    }
+
+    function showAlert(type) {
+      const container = document.getElementById('alert-container');
+      container.classList.remove('hidden', 'bg-emerald-950/40', 'border-emerald-500/20', 'text-emerald-300', 'bg-red-950/40', 'border-red-500/20', 'text-red-300');
+      
+      const t = dictionary[currentLanguage];
+      if (type === 'success') {
+        container.innerText = t.successMsg;
+        container.classList.add('bg-emerald-950/40', 'border', 'border-emerald-500/20', 'text-emerald-300');
+      } else {
+        container.innerText = t.duplicateMsg;
+        container.classList.add('bg-red-950/40', 'border', 'border-red-500/20', 'text-red-300');
+      }
+      container.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetForm() {
+      document.getElementById('reg-form').reset();
+      clearUpload();
+    }
+
+    // Populate Leaderboard Grid Cards
+    let filteredQuery = '';
+    function handleSearch(val) {
+      filteredQuery = val.toLowerCase().trim();
+      populateLeaderboard();
+    }
+
+    function populateLeaderboard() {
+      const list = document.getElementById('leaderboard-rows');
+      list.innerHTML = '';
+
+      const filtered = players.filter(p => 
+        p.inGameName.toLowerCase().includes(filteredQuery) || 
+        p.playerId.includes(filteredQuery)
+      );
+
+      if (filtered.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-16 text-gray-400 font-bold">
+            ${currentLanguage === 'en' ? 'No registered champions found.' : 'لا يوجد أبطال مسجلين حالياً.'}
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach((p, index) => {
+        const rank = index + 1;
+        let badge = `<span class="text-xs font-black font-mono text-gray-400">#${rank}</span>`;
+        if (rank === 1) badge = `<span class="text-xl">👑</span>`;
+        else if (rank === 2) badge = `<span class="text-xl">🥈</span>`;
+        else if (rank === 3) badge = `<span class="text-xl">🥉</span>`;
+
+        let cardStyle = "border-white/10 hover:border-accent/40 bg-black/60";
+        if (rank === 1) cardStyle = "border-accent/50 bg-gradient-to-r from-accent/15 via-black/60 to-black/60 shadow-lg shadow-accent/5";
+
+        const viewLabel = currentLanguage === 'en' ? 'View Proof' : 'عرض الإثبات';
+
+        const row = document.createElement('div');
+        row.className = `flex flex-col sm:flex-row items-center justify-between p-4 rounded-2xl border ${cardStyle} transition gap-4 cursor-pointer`;
+        row.setAttribute('onclick', `openProfileModal(${JSON.stringify(p).replace(/"/g, '&quot;')})`);
+        
+        row.innerHTML = `
+          <div class="flex items-center gap-4 w-full sm:w-auto">
+            <div class="w-10 text-center">${badge}</div>
+            <div class="h-10 w-10 rounded-full border border-white/20 bg-white/5 flex items-center justify-center text-accent relative overflow-hidden">
+              <img src="${p.avatarUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e'}" class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-base">${p.inGameName}</h4>
+              <p class="text-[10px] text-gray-300 font-mono">ID: ${p.playerId}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto border-t sm:border-0 border-white/5 pt-3 sm:pt-0">
+            <span class="text-xs text-white bg-white/10 rounded-lg px-3 py-1 font-bold sm:inline hidden">${p.discordTag}</span>
+            <div class="text-right">
+              <span class="text-lg font-black text-white font-mono">${p.score}</span>
+              <span class="text-[10px] text-gray-400 font-mono">/10</span>
+            </div>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    // Modal Manager
+    function openAdminModal() {
+      document.getElementById('admin-auth-modal').classList.remove('hidden');
+    }
+    function closeAdminModal() {
+      document.getElementById('admin-auth-modal').classList.add('hidden');
+      document.getElementById('admin-auth-error').classList.add('hidden');
+      document.getElementById('admin-pass').value = '';
+    }
+
+    // Admin Auth Code Logic
+    function handleAdminAuth(e) {
+      e.preventDefault();
+      const pass = document.getElementById('admin-pass').value;
+      const errorDiv = document.getElementById('admin-auth-error');
+
+      if (pass === 'Admin123') {
+        closeAdminModal();
+        openAdminPanel();
+      } else {
+        errorDiv.innerText = currentLanguage === 'en' ? '❌ Invalid Passcode!' : '❌ رمز المرور غير صحيح!';
+        errorDiv.classList.remove('hidden');
+      }
+    }
+
+    // Display Admin Control Panel
+    function openAdminPanel() {
+      document.getElementById('admin-panel-modal').classList.remove('hidden');
+      populateAdminTable();
+    }
+    function closeAdminPanel() {
+      document.getElementById('admin-panel-modal').classList.add('hidden');
+    }
+
+    // Live Administrative Management Table
+    const tempScores = {};
+    function populateAdminTable() {
+      const tbody = document.getElementById('admin-table-body');
+      tbody.innerHTML = '';
+
+      if (players.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400 font-bold">No registered champions to edit.</td></tr>`;
+        return;
+      }
+
+      players.forEach(p => {
+        if (tempScores[p.id] === undefined) {
+          tempScores[p.id] = p.score;
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-white/5";
+        tr.innerHTML = `
+          <td class="py-4 px-4 font-bold text-white">${p.inGameName}<br><span class="text-[9px] text-gray-400 font-mono">${p.playerId}</span></td>
+          <td class="py-4 px-4">
+            <a href="${p.avatarUrl}" target="_blank" class="text-accent underline text-[11px] font-bold">View Screenshot Proof</a>
+          </td>
+          <td class="py-4 px-4 text-center font-mono font-black text-sm text-accent" id="score-val-${p.id}">${tempScores[p.id]}</td>
+          <td class="py-4 px-4 text-center">
+            <input type="range" min="0" max="10" step="0.5" value="${tempScores[p.id]}" oninput="updateTempScore('${p.id}', this.value)" class="w-full accent-accent bg-black cursor-pointer">
+          </td>
+          <td class="py-4 px-4 text-right">
+            <button onclick="deleteSinglePlayer('${p.id}')" class="px-3 py-1 bg-red-600/35 hover:bg-red-600 text-white rounded text-[10px] font-black uppercase transition cursor-pointer">
+              REMOVE ENTRY
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateTempScore(id, val) {
+      tempScores[id] = Number(val);
+      document.getElementById(`score-val-${id}`).innerText = val;
+    }
+
+    // Sync match points directly to central Google Sheet
+    async function bulkSaveScores() {
+      if (!SCRIPT_URL) {
+        // Save local cache offline
+        players = players.map(p => {
+          if (tempScores[p.id] !== undefined) {
+            p.score = tempScores[p.id];
+          }
+          return p;
+        });
+        localStorage.setItem('3rb_fallback_players', JSON.stringify(players));
+        populateLeaderboard();
+        updateStatsAndBadge();
+        alert('Match scores saved locally!');
+        closeAdminPanel();
+        return;
+      }
+
+      const btn = document.querySelector('button[onclick="bulkSaveScores()"]');
+      const originalText = btn.innerText;
+      btn.disabled = true;
+      btn.innerText = 'TRANSMITTING GRADES...';
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'updateScores',
+            scores: tempScores
+          })
+        });
+        const data = await response.json();
+        if (data.status === 'success') {
+          alert('Leaderboard Updated & Sync Complete across all connected devices!');
+          closeAdminPanel();
+          fetchLiveRecords();
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Failed to transmit grades to Google Sheets.');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = originalText;
+      }
+    }
+
+    // Delete single participant record
+    async function deleteSinglePlayer(id) {
+      if (!confirm('Are you absolutely sure you want to remove this player?')) return;
+
+      if (!SCRIPT_URL) {
+        players = players.filter(p => p.id !== id);
+        localStorage.setItem('3rb_fallback_players', JSON.stringify(players));
+        populateLeaderboard();
+        updateStatsAndBadge();
+        populateAdminTable();
+        return;
+      }
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'deletePlayer',
+            id: id
+          })
+        });
+        const data = await response.json();
+        if (data.status === 'success') {
+          fetchLiveRecords();
+          setTimeout(populateAdminTable, 800);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Server deletion command failed.');
+      }
+    }
+
+    // Sync database sheet manually
+    function bulkSyncFromSheet() {
+      fetchLiveRecords();
+      setTimeout(populateAdminTable, 800);
+      alert('Local cache refreshed with master sheet data.');
+    }
+
+    // Reset entire arena database
+    async function resetAllRecords() {
+      if (!confirm('CRITICAL WARNING: This will permanently wipe ALL tournament registrations and scores from both Google Sheets and local storage. Proceed?')) return;
+
+      if (!SCRIPT_URL) {
+        players = [];
+        localStorage.removeItem('3rb_fallback_players');
+        populateLeaderboard();
+        updateStatsAndBadge();
+        closeAdminPanel();
+        alert('All local database records wiped.');
+        return;
+      }
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'resetAll'
+          })
+        });
+        const data = await response.json();
+        if (data.status === 'success') {
+          players = [];
+          populateLeaderboard();
+          updateStatsAndBadge();
+          closeAdminPanel();
+          alert('Central Master Sheet and local caches wiped completely!');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Failed to execute reset action on server.');
+      }
+    }
+
+    // Profile Account Card Viewer
+    function openProfileModal(player) {
+      document.getElementById('prof-ign').innerText = player.inGameName;
+      document.getElementById('prof-tag').innerText = player.discordTag;
+      document.getElementById('prof-id').innerText = player.playerId;
+      document.getElementById('prof-score').innerText = `${player.score} / 10`;
+      
+      const img = document.getElementById('prof-img');
+      img.src = player.avatarUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e';
+
+      document.getElementById('player-profile-modal').classList.remove('hidden');
+    }
+    function closeProfileModal() {
+      document.getElementById('player-profile-modal').classList.add('hidden');
+    }
+
+    // Boot Up Application!
+    window.onload = init;
+  </script>
+</body>
+</html>
