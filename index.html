@@ -476,7 +476,7 @@
 
     // Initialize Page
     function init() {
-      // Load stored custom background if any
+      // Load stored custom background if any (Fast loading)
       const savedBg = localStorage.getItem('3rb_custom_bg_url');
       if (savedBg) {
         document.body.style.backgroundImage = `url('${savedBg}')`;
@@ -490,7 +490,7 @@
       fetchLiveRecords();
       lucide.createIcons();
 
-      // Start background polling to ensure everyone sees the same sheet updates
+      // Start background polling to ensure everyone sees the same sheet updates and live backgrounds!
       setInterval(fetchLiveRecords, 10000);
     }
 
@@ -567,17 +567,26 @@
       previewContainer.classList.add('hidden');
     }
 
-    // Fetch live entries from connected Google Sheet Web App Script
+    // Fetch live entries and backdrop directly from connected Google Sheet Web App
     async function fetchLiveRecords() {
       if (!SCRIPT_URL) return;
       try {
         const res = await fetch(SCRIPT_URL);
         if (!res.ok) throw new Error('Network error');
         const data = await res.json();
+        
+        // 1. Update leaderboard data
         if (data && Array.isArray(data.players)) {
           players = data.players;
           populateLeaderboard();
           updateStatsAndBadge();
+        }
+        
+        // 2. Dynamically apply live background across all devices!
+        if (data && data.backgroundUrl) {
+          document.body.style.backgroundImage = `url('${data.backgroundUrl}')`;
+          localStorage.setItem('3rb_custom_bg_url', data.backgroundUrl);
+          document.getElementById('bg-url-input').value = data.backgroundUrl;
         }
       } catch (err) {
         console.error('Google Sheet background fetch failed:', err);
@@ -593,16 +602,38 @@
       fetchLiveRecords();
     }
 
-    function saveBackgroundUrl() {
+    // Save customized backdrop background to server so everyone sees it live!
+    async function saveBackgroundUrl() {
       const url = document.getElementById('bg-url-input').value.trim();
-      if (url) {
-        document.body.style.backgroundImage = `url('${url}')`;
-        localStorage.setItem('3rb_custom_bg_url', url);
-        alert('Custom Background Applied Successfully!');
-      } else {
-        localStorage.removeItem('3rb_custom_bg_url');
-        document.body.style.backgroundImage = "url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070')";
-        alert('Reset to Default Arena Background!');
+      const finalUrl = url || "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070";
+
+      // Apply locally immediately for instant feedback
+      document.body.style.backgroundImage = `url('${finalUrl}')`;
+      localStorage.setItem('3rb_custom_bg_url', finalUrl);
+
+      if (!SCRIPT_URL) {
+        alert('Custom Background Applied Locally (Offline Fallback)!');
+        return;
+      }
+
+      // Send to server to update config sheet
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'updateBackground',
+            backgroundUrl: finalUrl
+          })
+        });
+        const data = await response.json();
+        if (data.status === 'success') {
+          alert('Arena Backdrop Synchronized & Live Across All Connected Devices! 🚀');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Failed to sync backdrop to Google Sheets database.');
       }
     }
 
