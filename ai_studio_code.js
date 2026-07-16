@@ -1,9 +1,33 @@
+// دالة لجلب ورقة الإعدادات أو إنشائها تلقائياً إذا لم تكن موجودة
+function getConfigSheet(ss) {
+  let configSheet = ss.getSheetByName("Config");
+  if (!configSheet) {
+    configSheet = ss.insertSheet("Config");
+    configSheet.appendRow(["SettingName", "Value"]);
+    configSheet.appendRow(["background_url", "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070"]);
+  }
+  return configSheet;
+}
+
 function doGet(e) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getActiveSheet();
   const data = sheet.getDataRange().getValues();
   const players = [];
   
-  // Skip row 1 (headers)
+  // جلب رابط الخلفية الحية من ورقة الإعدادات
+  const configSheet = getConfigSheet(ss);
+  const configData = configSheet.getDataRange().getValues();
+  let backgroundUrl = "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070"; // القيمة الافتراضية
+  
+  for (let i = 1; i < configData.length; i++) {
+    if (String(configData[i][0]) === "background_url") {
+      backgroundUrl = String(configData[i][1]);
+      break;
+    }
+  }
+  
+  // تخطي الصف الأول (العناوين) للاعبين
   for (let i = 1; i < data.length; i++) {
     players.push({
       id: String(data[i][0]),
@@ -16,25 +40,40 @@ function doGet(e) {
     });
   }
   
-  // Sort players by score descending
+  // ترتيب اللاعبين تنازلياً حسب النقاط
   players.sort((a, b) => b.score - a.score);
   
-  return ContentService.createTextOutput(JSON.stringify({ players: players }))
+  // إرجاع قائمة اللاعبين ورابط الخلفية الحالي
+  return ContentService.createTextOutput(JSON.stringify({ players: players, backgroundUrl: backgroundUrl }))
     .setMimeType(ContentService.MimeType.JSON)
     .setHeader('Access-Control-Allow-Origin', '*');
 }
 
 function doPost(e) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getActiveSheet();
   const postData = JSON.parse(e.postData.contents);
   const action = postData.action;
+  
+  // إجراء حفظ وتحديث رابط الخلفية سحابياً
+  if (action === 'updateBackground') {
+    const configSheet = getConfigSheet(ss);
+    const newBgUrl = String(postData.backgroundUrl).trim();
+    
+    // تحديث القيمة في الشيت
+    configSheet.getRange(2, 2).setValue(newBgUrl);
+    
+    return ContentService.createTextOutput(JSON.stringify({ status: 'success' }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader('Access-Control-Allow-Origin', '*');
+  }
   
   if (action === 'register') {
     const data = sheet.getDataRange().getValues();
     const newPlayerId = String(postData.playerId).trim().toLowerCase();
     const newIgn = String(postData.inGameName).trim().toLowerCase();
     
-    // Check duplicates
+    // التحقق من التكرار
     for (let i = 1; i < data.length; i++) {
       if (String(data[i][1]).trim().toLowerCase() === newPlayerId || 
           String(data[i][2]).trim().toLowerCase() === newIgn) {
@@ -44,7 +83,7 @@ function doPost(e) {
       }
     }
     
-    // Append player
+    // إضافة اللاعب
     const uuid = Utilities.getUuid();
     sheet.appendRow([
       uuid,
@@ -52,7 +91,7 @@ function doPost(e) {
       postData.inGameName,
       postData.discordTag,
       postData.avatarUrl, // Base64 image
-      0, // initial score
+      0, // النقاط الابتدائية
       Date.now()
     ]);
     
