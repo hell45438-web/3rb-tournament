@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3rB Champions Arena</title>
+  
+  <!-- Font Imports -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    :root {
+      --accent-color: #a855f7;
+      --accent-color-rgb: 168, 85, 247;
+      --accent-color-hover: #c084fc;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #050508;
+    }
+    
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Glassmorphism Classes */
+    .glass-card {
+      background: rgba(10, 10, 10, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(168, 85, 247, 0.3);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(168, 85, 247, 0.6);
+    }
+    
+    /* Input adjustments for arrows */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    /* Transitions */
+    .fade-enter {
+      opacity: 0;
+      transform: scale(0.98);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .fade-enter-active {
+      opacity: 1;
+      transform: scale(1);
+    }
+  </style>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: 'var(--accent-color, #a855f7)',
+            'accent-hover': 'var(--accent-color-hover, #c084fc)',
+            slate: {
+              850: '#151b2a',
+              950: '#070a13'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="relative min-h-screen text-slate-100 flex flex-col selection:bg-purple-500/30 selection:text-white pb-12 overflow-x-hidden">
+
+  <!-- Dynamic Live Background Wrapper -->
+  <div id="bg-container" class="fixed inset-0 w-full h-full object-cover -z-20 pointer-events-none transition-all duration-700">
+    <!-- Default Canvas styling when there is no custom background -->
+    <div id="bg-default-layer" class="absolute inset-0 bg-[#06060b]">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(24,12,48,0.4)_0%,transparent_70%)]"></div>
+      <div class="absolute top-0 left-0 w-full h-full bg-[linear-gradient(rgba(18,18,30,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(18,18,30,0.3)_1px,transparent_1px)] bg-[size:32px_32px] opacity-40"></div>
+    </div>
+    
+    <!-- Custom Video/Image/GIF Layer -->
+    <div id="bg-custom-layer" class="absolute inset-0 opacity-0 transition-opacity duration-700 w-full h-full"></div>
+  </div>
+
+  <!-- Dynamic Accent Color Style Tag -->
+  <style id="dynamic-accent-styles">
+    :root {
+      --accent-color: #a855f7;
+      --accent-color-rgb: 168, 85, 247;
+      --accent-color-hover: #c084fc;
+    }
+  </style>
+
+  <!-- Glowing Visual Top Accent -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.06),transparent_55%)] pointer-events-none z-0"></div>
+
+  <!-- HEADER -->
+  <header class="relative z-10 border-b border-white/5 bg-slate-950/20 backdrop-blur-md">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex h-20 items-center justify-between">
+        
+        <!-- Logo and Nav Title -->
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-fuchsia-600 shadow-lg shadow-purple-500/20 ring-1 ring-white/10">
+            <i data-lucide="trophy" class="h-5 w-5 text-white"></i>
+          </div>
+          <span data-trn="navTitle" class="text-sm font-black tracking-widest text-white uppercase font-mono">3rB TOURNAMENT</span>
+        </div>
+
+        <!-- Right Side Widgets -->
+        <div class="flex items-center gap-4">
+          <!-- Live Registrations count badge -->
+          <div class="hidden sm:flex items-center gap-2 rounded-xl bg-slate-900/60 px-3.5 py-1.5 border border-white/5 text-xs font-semibold">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+            </span>
+            <span class="text-slate-400"><span id="live-player-count">0</span> Registered</span>
+          </div>
+
+          <!-- Bilingual Toggle Button -->
+          <button id="lang-toggle-btn" class="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-black uppercase tracking-wider text-white hover:bg-white/10 active:scale-95 transition-all cursor-pointer">
+            <i data-lucide="languages" class="h-4 w-4"></i>
+            <span id="lang-toggle-text">العربية</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 text-center">
+    <div class="inline-flex items-center gap-1.5 rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-accent mb-4">
+      <i data-lucide="sparkles" class="h-3 w-3 animate-pulse"></i>
+      <span data-trn="heroBadge">3rB ESPORTS PRESENTS</span>
+    </div>
+    
+    <h1 data-trn="heroTitle" class="font-sans text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-4 uppercase italic">
+      3rB CHAMPIONS ARENA
+    </h1>
+    
+    <p data-trn="heroSubtitle" class="mx-auto max-w-2xl text-xs sm:text-sm text-slate-300 leading-relaxed">
+      Register now, climb the ranks, and secure ultimate glory in the 3rB Gaming Tournament.
+    </p>
+  </div>
+
+  <!-- MAIN CONTAINER (PHASE TOGGLE + ACTIVE VIEW) -->
+  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 flex flex-col items-center">
+    
+    <!-- Double-Phase Toggle Switch -->
+    <div class="flex justify-center mb-8">
+      <div class="inline-flex rounded-2xl border border-slate-800 bg-slate-900/50 p-1.5 backdrop-blur-sm">
+        <button id="btn-phase-reg" class="flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white shadow-lg shadow-purple-500/20">
+          <i data-lucide="calendar" class="h-4 w-4"></i>
+          <span data-trn="phase1Title">Registration Live</span>
+        </button>
+        <button id="btn-phase-ldr" class="flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer text-slate-400 hover:text-slate-200">
+          <i data-lucide="trophy" class="h-4 w-4"></i>
+          <span data-trn="phase2Title">Leaderboard & Results</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN VIEWS -->
+    <main class="w-full relative min-h-[400px]">
+      
+      <!-- VIEW 1: REGISTRATION -->
+      <section id="view-registration" class="fade-enter fade-enter-active w-full max-w-xl mx-auto">
+        <div class="glass-card relative overflow-hidden rounded-3xl p-6 sm:p-8 shadow-2xl">
+          
+          <!-- Decorative ambient glow -->
+          <div class="absolute -top-24 -left-24 h-48 w-48 rounded-full bg-accent/15 blur-3xl pointer-events-none"></div>
+          
+          <div class="text-center mb-8">
+            <h2 data-trn="formTitle" class="font-sans text-2xl font-black tracking-wider text-white mb-2 uppercase italic" style="text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9);">
+              PLAYER REGISTRATION
+            </h2>
+            <p data-trn="formSubtitle" class="text-xs text-gray-300">
+              Fill in your official gaming credentials to register for the tournament.
+            </p>
+          </div>
+
+          <!-- Alert/Notification Area -->
+          <div id="form-alert-container" class="hidden mb-6 rounded-xl border p-3.5 text-xs font-bold flex items-center gap-2"></div>
+
+          <!-- REGISTRATION FORM -->
+          <form id="reg-form" class="space-y-5 relative z-10">
+            
+            <!-- In-Game Name (IGN) -->
+            <div class="space-y-2">
+              <label class="text-[10px] uppercase font-bold text-gray-200 tracking-wider flex items-center gap-1.5">
+                <i data-lucide="user" class="h-3.5 w-3.5 text-accent"></i>
+                <span data-trn="ignLabel">In-Game Name (IGN)</span> <span class="text-fuchsia-500">*</span>
+              </label>
+              <input id="input-ign" type="text" placeholder="e.g., ShadowSlayer" class="w-full rounded-lg border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm text-white placeholder-slate-500 transition-all focus:border-accent focus:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-accent/50" required>
+            </div>
+
+            <!-- Player ID -->
+            <div class="space-y-2">
+              <label class="text-[10px] uppercase font-bold text-gray-200 tracking-wider flex items-center gap-1.5">
+                <i data-lucide="hash" class="h-3.5 w-3.5 text-accent"></i>
+                <span data-trn="playerIdLabel">Player ID</span> <span class="text-fuchsia-500">*</span>
+              </label>
+              <input id="input-player-id" type="text" placeholder="e.g., 987654321" class="w-full rounded-lg border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm text-white placeholder-slate-500 transition-all focus:border-accent focus:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-accent/50" required>
+            </div>
+
+            <!-- Discord Tag -->
+            <div class="space-y-2">
+              <label class="text-[10px] uppercase font-bold text-gray-200 tracking-wider flex items-center gap-1.5">
+                <i data-lucide="disc" class="h-3.5 w-3.5 text-accent"></i>
+                <span data-trn="discordLabel">Discord Tag</span> <span class="text-fuchsia-500">*</span>
+              </label>
+              <input id="input-discord" type="text" placeholder="e.g., shadow#1234" class="w-full rounded-lg border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm text-white placeholder-slate-500 transition-all focus:border-accent focus:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-accent/50" required>
+            </div>
+
+            <!-- Screenshot / Avatar Upload -->
+            <div class="space-y-2.5 pt-2">
+              <label class="text-[10px] uppercase font-bold text-gray-200 tracking-wider flex items-center gap-1.5">
+                <i data-lucide="image" class="h-3.5 w-3.5 text-accent"></i>
+                <span data-trn="avatarLabel">In-Game Account Screenshot</span> <span class="text-fuchsia-500">*</span>
+              </label>
+
+              <!-- Drag and Drop Area -->
+              <div id="screenshot-upload-box" class="relative flex flex-col items-center justify-center border-2 border-dashed border-slate-700 bg-slate-950/60 hover:border-accent/40 hover:bg-slate-950/80 rounded-2xl p-6 transition-all text-center cursor-pointer">
+                <input id="screenshot-file-input" type="file" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                <i data-lucide="upload-cloud" class="h-8 w-8 text-accent mb-2"></i>
+                <span class="text-xs font-black text-white uppercase tracking-wider mb-1" id="upload-box-title">Drag & Drop Screenshot Here</span>
+                <span class="text-[10px] text-gray-400" id="upload-box-subtitle">or click to browse your device</span>
+              </div>
+
+              <!-- Uploaded Screenshot Preview Box (Initially Hidden) -->
+              <div id="screenshot-preview-box" class="hidden relative rounded-2xl border border-accent/30 bg-slate-950/60 overflow-hidden p-3.5 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <div class="h-8 w-8 rounded bg-accent/10 border border-accent/20 flex items-center justify-center text-accent shrink-0">
+                      <i data-lucide="image" class="h-4 w-4"></i>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <span id="preview-file-name" class="text-xs font-bold text-white truncate max-w-[200px]">screenshot.png</span>
+                      <span class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider" id="preview-ready-badge">READY TO SUBMIT</span>
+                    </div>
+                  </div>
+                  <button id="clear-screenshot-btn" type="button" class="rounded-lg p-1.5 border border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-red-400 transition-colors cursor-pointer text-slate-400">
+                    <i data-lucide="x" class="h-3.5 w-3.5"></i>
+                  </button>
+                </div>
+                
+                <div class="relative aspect-video rounded-xl border border-slate-800 bg-black/40 overflow-hidden">
+                  <img id="screenshot-img" src="" alt="Screenshot Preview" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                  <div class="absolute bottom-2 left-2 flex items-center gap-1 bg-black/60 backdrop-blur-md rounded px-2 py-0.5 border border-white/5 text-[9px] font-bold text-accent uppercase tracking-wider">
+                    <span class="h-1 w-1 rounded-full bg-emerald-400"></span>
+                    <span id="preview-tag-text">IMAGE PREVIEW</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Helper Note -->
+              <p data-trn="screenshotHelper" class="text-[10px] text-gray-400 leading-relaxed italic text-left px-1">
+                Please upload a clear screenshot of your in-game profile or stats page.
+              </p>
+            </div>
+
+            <!-- Submit Button -->
+            <button id="reg-submit-btn" type="submit" class="w-full py-4 mt-6 rounded-xl font-black uppercase text-sm tracking-widest cursor-pointer flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:scale-[1.01]" style="background: #FFB700; color: #0A0A0B; border: 1px solid #FFF; box-shadow: 0 0 20px rgba(255, 183, 0, 0.6), 0 4px 20px rgba(0, 0, 0, 0.4); font-weight: 900;">
+              <span data-trn="submitButton">JOIN THE ARENA</span>
+            </button>
+
+          </form>
+        </div>
+      </section>
+
+      <!-- VIEW 2: LEADERBOARD -->
+      <section id="view-leaderboard" class="hidden w-full max-w-4xl mx-auto space-y-6">
+        
+        <div class="text-center">
+          <h2 data-trn="leaderboardTitle" class="font-sans text-2xl sm:text-3xl font-black tracking-wider text-white mb-2 uppercase italic">
+            THE LEADERBOARD
+          </h2>
+          <p data-trn="leaderboardSubtitle" class="text-xs text-slate-400">
+            Real-time standings of the 3rB Gaming Tournament arena.
+          </p>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="flex items-center relative max-w-md mx-auto w-full">
+          <i data-lucide="search" class="absolute left-4 h-4 w-4 text-slate-500"></i>
+          <input id="leaderboard-search" type="text" placeholder="Search players by IGN or Player ID..." class="w-full rounded-2xl border border-slate-800 bg-slate-900/40 py-3.5 pl-11 pr-4 text-xs text-white placeholder-slate-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50 backdrop-blur-sm">
+        </div>
+
+        <!-- Standing Grid / Card -->
+        <div class="glass-card rounded-3xl overflow-hidden shadow-2xl border border-slate-800 bg-slate-950/40">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 bg-slate-900/30 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                  <th data-trn="rankCol" class="p-4 sm:p-5 text-center w-24">RANK</th>
+                  <th data-trn="playerCol" class="p-4 sm:p-5">PLAYER</th>
+                  <th data-trn="scoreCol" class="p-4 sm:p-5 text-center w-36">SCORE</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-tbody" class="divide-y divide-slate-850/50 text-xs">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Empty Standings State -->
+          <div id="leaderboard-empty-state" class="hidden py-20 text-center text-slate-500 font-mono font-bold text-sm">
+            <i data-lucide="shield-alert" class="h-10 w-10 mx-auto mb-3.5 text-slate-600"></i>
+            <span data-trn="noPlayers">No champions registered yet. The arena awaits its first hero!</span>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODALS -->
+
+  <!-- 1. Player Profile Inspection Modal -->
+  <div id="modal-player-details" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <!-- Backdrop overlay -->
+    <div class="modal-backdrop absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+    <!-- Modal container -->
+    <div class="glass-card relative w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl z-10 transition-all duration-300">
+      
+      <!-- Close button -->
+      <button class="modal-close-btn absolute top-5 right-5 rounded-xl p-2 border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white hover:border-accent/30 transition-all cursor-pointer">
+        <i data-lucide="x" class="h-4 w-4"></i>
+      </button>
+
+      <div class="text-center mb-6">
+        <h3 data-trn="modalTitle" class="text-xs font-black uppercase tracking-widest text-accent mb-1.5">CHAMPION PROFILE</h3>
+        <h2 id="modal-player-ign" class="text-2xl font-black text-white font-mono uppercase truncate">3rB_ViperX</h2>
+      </div>
+
+      <!-- Main Profile Layout Grid -->
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="rounded-2xl border border-slate-800/80 bg-slate-950/60 p-4 text-center">
+          <div data-trn="rankLabelModal" class="text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Current Standing</div>
+          <div id="modal-player-rank" class="text-2xl font-black text-white font-mono">#0</div>
+        </div>
+        <div class="rounded-2xl border border-slate-800/80 bg-slate-950/60 p-4 text-center">
+          <div data-trn="scoreLabelModal" class="text-[10px] font-black uppercase tracking-wider text-slate-500 mb-1">Arena Score</div>
+          <div id="modal-player-score" class="text-2xl font-black text-accent font-mono font-bold">0.0 / 10</div>
+        </div>
+      </div>
+
+      <!-- Metadata lines -->
+      <div class="space-y-3.5 mb-6">
+        <div class="flex items-center justify-between border-b border-slate-800/50 pb-2.5">
+          <div class="flex items-center gap-2 text-xs text-slate-400 font-bold">
+            <i data-lucide="hash" class="h-4 w-4 text-accent"></i>
+            <span data-trn="playerIdLabelModal">Official Player ID</span>
+          </div>
+          <span id="modal-player-id" class="text-xs font-mono font-bold text-white">109847291</span>
+        </div>
+        <div class="flex items-center justify-between border-b border-slate-800/50 pb-2.5">
+          <div class="flex items-center gap-2 text-xs text-slate-400 font-bold">
+            <i data-lucide="disc" class="h-4 w-4 text-accent"></i>
+            <span data-trn="discordLabelModal">Discord Profile</span>
+          </div>
+          <span id="modal-player-discord" class="text-xs font-mono font-bold text-white">viper#4432</span>
+        </div>
+        <div class="flex items-center justify-between border-b border-slate-800/50 pb-2.5">
+          <div class="flex items-center gap-2 text-xs text-slate-400 font-bold">
+            <i data-lucide="calendar" class="h-4 w-4 text-accent"></i>
+            <span data-trn="joinedAt">Registered On</span>
+          </div>
+          <span id="modal-player-date" class="text-xs font-mono font-bold text-white">---</span>
+        </div>
+      </div>
+
+      <!-- Attachment Screenshot Display -->
+      <div class="space-y-2">
+        <span class="text-[10px] font-black text-accent uppercase tracking-wider flex items-center gap-1.5 mb-2">
+          <i data-lucide="image" class="h-4 w-4"></i>
+          <span data-trn="avatarLabel">In-Game Account Screenshot</span>
+        </span>
+        
+        <div class="rounded-xl overflow-hidden border border-slate-800 bg-slate-950/80 p-1">
+          <img id="modal-player-screenshot" src="" alt="Account Screenshot" class="w-full h-auto max-h-56 object-contain mx-auto rounded-lg">
+          <div id="modal-player-preset-avatar" class="hidden text-xs text-slate-500 italic bg-black/20 p-6 rounded-lg text-center font-mono">
+            Demo avatar style
+          </div>
+        </div>
+      </div>
+
+      <button data-trn="closeBtn" class="modal-close-btn w-full mt-6 py-3.5 border border-slate-800 bg-slate-900 hover:bg-slate-850 text-slate-300 hover:text-white rounded-xl text-xs font-black uppercase tracking-widest transition-colors cursor-pointer">
+        CLOSE PROFILE
+      </button>
+
+    </div>
+  </div>
+
+  <!-- 2. Admin Auth Password Prompt -->
+  <div id="modal-admin-auth" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-backdrop absolute inset-0 bg-black/85 backdrop-blur-md"></div>
+    <div class="glass-card relative w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl z-10">
+      
+      <button class="modal-close-btn absolute top-5 right-5 rounded-xl p-2 border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white hover:border-accent/30 transition-all cursor-pointer">
+        <i data-lucide="x" class="h-4 w-4"></i>
+      </button>
+
+      <div class="text-center mb-6">
+        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 border border-accent/20 mb-3 text-accent">
+          <i data-lucide="shield-check" class="h-6 w-6"></i>
+        </div>
+        <h3 data-trn="passwordPromptTitle" class="text-lg font-black uppercase tracking-wider text-white">Admin Authentication</h3>
+      </div>
+
+      <form id="admin-auth-form" class="space-y-4">
+        <div class="space-y-2">
+          <label data-trn="passwordLabel" class="text-[10px] uppercase font-bold text-gray-200 tracking-wider">Enter Admin Password</label>
+          <input id="input-admin-password" type="password" placeholder="Password" class="w-full rounded-lg border border-slate-700 bg-slate-900/60 px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-accent focus:bg-slate-900 focus:outline-none focus:ring-1 focus:ring-accent/50" required>
+        </div>
+        
+        <div id="admin-auth-error" class="hidden rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs font-bold text-red-400">
+          <span data-trn="invalidPasswordError">⚠️ Invalid password. Please try again.</span>
+        </div>
+
+        <button data-trn="submitPasswordBtn" type="submit" class="w-full py-3.5 rounded-xl font-black uppercase text-xs tracking-widest cursor-pointer transition-all active:scale-[0.98]" style="background: #FFB700; color: #0A0A0B; border: 1px solid #FFF; box-shadow: 0 0 20px rgba(255, 183, 0, 0.6), 0 4px 20px rgba(0, 0, 0, 0.4); font-weight: 900;">
+          Unlock Dashboard
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- 3. Admin Control Panel Modal -->
+  <div id="modal-admin-panel" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-backdrop absolute inset-0 bg-black/85 backdrop-blur-md"></div>
+    <div class="glass-card relative w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 sm:p-8 shadow-2xl z-10">
+      
+      <!-- Close button -->
+      <button class="modal-close-btn absolute top-5 right-5 rounded-xl p-2 border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white hover:border-accent/30 transition-all cursor-pointer">
+        <i data-lucide="x" class="h-5 w-5"></i>
+      </button>
+
+      <div class="space-y-8">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-6 pr-8">
+          <div>
+            <h3 class="text-xl sm:text-2xl font-black tracking-wider text-white flex items-center gap-2.5 uppercase italic">
+              <i data-lucide="sliders" class="h-6 w-6 text-accent"></i>
+              <span data-trn="adminTitle">3rB TOURNAMENT ORGANIZER PORTAL</span>
+            </h3>
+            <p data-trn="adminSubtitle" class="text-xs text-slate-400 mt-1">
+              Manage phases, adjust player scores, and seed mock data.
+            </p>
+          </div>
+          <div class="text-xs bg-accent/10 border border-accent/20 text-accent font-semibold rounded-xl px-4 py-2.5 max-w-sm flex items-center gap-2">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+            </span>
+            <span data-trn="adminOnlyNote">💡 This panel simulates the organizer dashboard. Changes immediately persist to local storage.</span>
+          </div>
+        </div>
+
+        <!-- Success Toast Alert inside Admin Panel -->
+        <div id="admin-toast-alert" class="hidden rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-xs font-bold text-emerald-400 flex items-center gap-3 shadow-lg shadow-emerald-500/5">
+          <i data-lucide="shield-check" class="h-5 w-5 text-emerald-400 animate-bounce"></i>
+          <div>
+            <div id="admin-toast-title" class="text-sm font-black uppercase tracking-wider">Leaderboard Updated Successfully</div>
+            <div id="admin-toast-desc" class="text-slate-400 font-normal mt-0.5">All score adjustments and tournament changes have been committed.</div>
+          </div>
+        </div>
+
+        <!-- Upper Control Blocks Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- 1. Phase Toggle Selection -->
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/30 p-5 space-y-4">
+            <h4 class="text-sm font-black text-slate-300 flex items-center gap-2 uppercase tracking-wide">
+              <span class="h-2 w-2 rounded-full bg-accent"></span>
+              <span data-trn="adminPhaseLabel">Active Tournament Phase:</span>
+            </h4>
+            <div class="flex flex-col gap-2">
+              <button id="admin-select-phase1" class="w-full rounded-xl border p-3.5 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer text-center border-slate-800 bg-slate-900/50 text-slate-400 hover:bg-slate-900">
+                <span data-trn="phase1Select">Phase 1: Registration Open</span>
+              </button>
+              <button id="admin-select-phase2" class="w-full rounded-xl border p-3.5 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer text-center border-slate-800 bg-slate-900/50 text-slate-400 hover:bg-slate-900">
+                <span data-trn="phase2Select">Phase 2: Leaderboard & Results</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Quick Operations -->
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/30 p-5 space-y-4">
+            <h4 class="text-sm font-black text-slate-300 flex items-center gap-2 uppercase tracking-wide">
+              <span class="h-2 w-2 rounded-full bg-fuchsia-500"></span>
+              <span id="label-quick-actions">QUICK UTILITIES</span>
+            </h4>
+            <div class="space-y-2">
+              <button id="admin-btn-seed" class="w-full flex items-center justify-center gap-2 rounded-xl border border-dashed border-fuchsia-500/30 bg-fuchsia-950/10 p-3.5 text-xs font-bold uppercase tracking-wider text-fuchsia-400 transition-all hover:bg-fuchsia-950/20 active:scale-95 cursor-pointer">
+                <i data-lucide="sparkles" class="h-4 w-4 text-fuchsia-400"></i>
+                <span data-trn="seedPlayersBtn">Seed Demo Players</span>
+              </button>
+              <button id="admin-btn-reset" class="w-full flex items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-950/10 p-3.5 text-xs font-bold uppercase tracking-wider text-red-400 transition-all hover:bg-red-950/20 active:scale-95 cursor-pointer">
+                <i data-lucide="refresh-cw" class="h-4 w-4"></i>
+                <span data-trn="resetAllBtn">Reset Tournament Data</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Metrics/Analytics Dashboard Block -->
+          <div class="rounded-2xl border border-slate-800 bg-slate-900/30 p-5 flex flex-col justify-between space-y-4">
+            <h4 class="text-sm font-black text-slate-300 flex items-center gap-2 uppercase tracking-wide">
+              <span class="h-2 w-2 rounded-full bg-accent"></span>
+              <span id="label-metrics">TOURNAMENT METRICS</span>
+            </h4>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="rounded-xl bg-slate-950/80 p-3.5 text-center border border-slate-900">
+                <div id="stat-registered-count" class="text-2xl font-black text-white font-mono">0</div>
+                <div class="text-[9px] text-slate-500 uppercase tracking-wider mt-1" id="stat-lbl-registered">Registered</div>
+              </div>
+              <div class="rounded-xl bg-slate-950/80 p-3.5 text-center border border-slate-900">
+                <div id="stat-graded-count" class="text-2xl font-black text-accent font-mono font-bold">0</div>
+                <div class="text-[9px] text-slate-500 uppercase tracking-wider mt-1" id="stat-lbl-graded">Scored</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Google Sheets Live Integration -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/30 p-5 space-y-4">
+          <h4 class="text-sm font-black text-slate-300 flex items-center gap-2 uppercase tracking-wide">
+            <i data-lucide="database" class="h-4 w-4 text-emerald-400"></i>
+            <span id="lbl-db-integration">GOOGLE SHEETS LIVE DATABASE INTEGRATION</span>
+          </h4>
+          <p class="text-xs text-slate-400" id="lbl-db-integration-desc">
+            Connect your tournament to a live Google Sheet to share registrations and scores instantly across all players and devices.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+            <div class="md:col-span-8 space-y-1.5">
+              <label class="text-[10px] font-black uppercase tracking-widest text-slate-400" id="lbl-script-url">
+                Google Apps Script Web App URL
+              </label>
+              <input id="input-script-url" type="text" placeholder="https://script.google.com/macros/s/.../exec" class="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs text-white placeholder-slate-600 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50 font-mono">
+            </div>
+            <div class="md:col-span-4 flex gap-2">
+              <button id="btn-save-script-url" type="button" class="flex-1 flex items-center justify-center gap-2 rounded-xl text-accent px-4 py-3 text-xs font-black uppercase tracking-widest transition-all active:scale-[0.98] cursor-pointer" style="background: #FFB700; color: #0A0A0B; border: 1px solid #FFF; box-shadow: 0 0 20px rgba(255, 183, 0, 0.6), 0 4px 20px rgba(0, 0, 0, 0.4); font-weight: 900;">
+                <i data-lucide="check" class="h-4 w-4"></i>
+                <span id="btn-save-script-url-text">Save & Connect</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Step by Step Setup Help -->
+          <details class="group border border-slate-800 bg-slate-950/40 rounded-xl overflow-hidden">
+            <summary class="p-3 text-[10px] font-black uppercase tracking-wider text-slate-400 cursor-pointer hover:text-white flex items-center justify-between select-none">
+              <span id="lbl-setup-guide-title">🔍 HOW DO I SET THIS UP FOR FREE? (STEP-BY-STEP)</span>
+              <span class="transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <div id="lbl-setup-guide-content" class="p-4 border-t border-slate-800 text-[11px] text-slate-400 font-mono space-y-2 leading-relaxed">
+              <div>1. Create a Google Sheet and name your columns in row 1: <strong class="text-accent">id, playerId, inGameName, discordTag, avatarUrl, score, createdAt</strong>.</div>
+              <div>2. Click Extensions → Apps Script. Paste the provided backend code.</div>
+              <div>3. Click Deploy → New Deployment → Web App. Set Access to "Anyone". Copy the Web App URL.</div>
+              <div>4. Paste the URL here to immediately sync registrations and leaderboard scores across the globe!</div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Background Manager -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/30 p-5 space-y-6">
+          <h4 class="text-sm font-black text-slate-300 flex items-center gap-2 uppercase tracking-wide">
+            <i data-lucide="palette" class="h-4 w-4 text-accent"></i>
+            <span data-trn="bgManagerTitle">Custom Background Manager</span>
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+            <!-- Type Selection -->
+            <div class="md:col-span-3 space-y-1.5">
+              <label data-trn="bgTypeLabel" class="text-[10px] font-black uppercase tracking-widest text-slate-400">Background Type</label>
+              <select id="select-bg-type" class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-3 text-xs text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50 appearance-none cursor-pointer">
+                <option value="static" data-trn="bgTypeStatic">Static Image</option>
+                <option value="gif" data-trn="bgTypeGif">Animated GIF</option>
+                <option value="video" data-trn="bgTypeVideo">Live Video (MP4/WebM)</option>
+              </select>
+            </div>
+
+            <!-- URL Input -->
+            <div class="md:col-span-5 space-y-1.5">
+              <label data-trn="bgUrlLabel" class="text-[10px] font-black uppercase tracking-widest text-slate-400">Paste Media URL (Image, GIF, MP4/WebM)</label>
+              <input id="input-bg-url" type="text" placeholder="e.g., https://.../background.mp4" class="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs text-white placeholder-slate-600 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50 font-mono">
+            </div>
+
+            <!-- Actions -->
+            <div class="md:col-span-4 flex gap-2 w-full">
+              <button id="btn-save-bg" type="button" class="flex-1 flex items-center justify-center gap-2 rounded-xl text-accent px-4 py-3 text-xs font-black uppercase tracking-widest transition-all active:scale-[0.98]" style="background: #FFB700; color: #0A0A0B; border: 1px solid #FFF; box-shadow: 0 0 20px rgba(255, 183, 0, 0.6), 0 4px 20px rgba(0, 0, 0, 0.4); font-weight: 900;">
+                <i data-lucide="check" class="h-4 w-4"></i>
+                <span data-trn="bgUpdateBtn">Update Background</span>
+              </button>
+              
+              <button id="btn-reset-bg" type="button" class="flex items-center justify-center gap-2 rounded-xl border border-slate-800 bg-slate-900/40 px-4 py-3 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-slate-900 active:scale-95 transition-all cursor-pointer">
+                <i data-lucide="refresh-cw" class="h-4 w-4"></i>
+                <span data-trn="bgResetBtn">Reset to Default Canvas</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Background Accent Theme Color Row -->
+          <div class="border-t border-slate-800/80 pt-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+            <div class="md:col-span-4 space-y-1.5">
+              <label data-trn="bgAccentLabel" class="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
+                <i data-lucide="palette" class="h-3.5 w-3.5 text-accent"></i>
+                Accent Color Theme
+              </label>
+              <select id="select-accent-theme" class="w-full rounded-xl border border-slate-800 bg-slate-950 px-3.5 py-3 text-xs text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50 appearance-none cursor-pointer">
+                <option value="default" data-trn="bgAccentDefault">Neon Purple (Default)</option>
+                <option value="cyan" data-trn="bgAccentCyan">Cyber Cyan</option>
+                <option value="gold" data-trn="bgAccentGold">Champion Gold</option>
+                <option value="red" data-trn="bgAccentRed">Ruby Red</option>
+                <option value="green" data-trn="bgAccentGreen">Emerald Green</option>
+                <option value="orange" data-trn="bgAccentOrange">Apex Orange</option>
+              </select>
+            </div>
+            <div class="md:col-span-8 text-[10px] text-slate-500 font-mono flex items-center md:h-10" id="lbl-accent-desc">
+              The selected color accent is instantly applied to all buttons, glow accents, and border frames.
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Table Registered List -->
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/30 p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <h4 class="text-sm font-black text-slate-300 flex items-center gap-2 uppercase tracking-wide">
+              <i data-lucide="database" class="h-4 w-4 text-accent"></i>
+              <span data-trn="adminPlayerListTitle">Registered Champions & Score Management</span>
+            </h4>
+            <input id="admin-search-input" type="text" placeholder="Filter registered list..." class="rounded-lg border border-slate-800 bg-slate-950 px-3.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50 w-full sm:w-60">
+          </div>
+
+          <!-- Score Input Matrix Table -->
+          <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/40">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 bg-slate-900/20 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                  <th class="p-3.5 text-center w-16">#</th>
+                  <th class="p-3.5 text-slate-400" id="admin-tbl-lbl-champion">CHAMPION</th>
+                  <th class="p-3.5 text-center text-slate-400" id="admin-tbl-lbl-current-score">CURRENT</th>
+                  <th data-trn="scoreInputLabel" class="p-3.5 text-center w-48 text-slate-400">Set Score (0-10)</th>
+                  <th class="p-3.5 text-center w-28 text-slate-400" id="admin-tbl-lbl-actions">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="admin-players-tbody" class="divide-y divide-slate-850 text-xs">
+                <!-- Dynamic player lines to update scores -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Footer Buttons of Admin Panel -->
+        <div class="flex justify-end pt-4 border-t border-slate-800/80 gap-3">
+          <button id="admin-panel-close-btn" class="px-6 py-3 border border-slate-800 bg-slate-900/40 text-slate-400 hover:text-white rounded-xl text-xs font-black uppercase tracking-widest cursor-pointer hover:bg-slate-900 active:scale-95 transition-all">
+            <span id="lbl-close-no-save">Close Details</span>
+          </button>
+          <button id="admin-panel-bulk-save-btn" class="px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest cursor-pointer transition-all active:scale-95" style="background: #FFB700; color: #0A0A0B; border: 1px solid #FFF; box-shadow: 0 0 20px rgba(255, 183, 0, 0.6), 0 4px 20px rgba(0, 0, 0, 0.4); font-weight: 900;">
+            <span id="lbl-bulk-save">Update Leaderboard</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER DETAILS -->
+  <footer class="relative z-10 w-full text-center py-8 text-[11px] font-mono tracking-widest text-slate-400 flex flex-col items-center justify-center gap-2 mt-16">
+    <div>© <span id="footer-year">2026</span> 3rB ESPORTS. ALL RIGHTS RESERVED.</div>
+    <div class="flex items-center gap-2 justify-center">
+      <span>CHAMPIONS ARENA v2.1</span>
+      <span>•</span>
+      <button id="footer-admin-btn" class="flex items-center gap-1 text-slate-400 hover:text-accent cursor-pointer transition-colors">
+        <i data-lucide="settings" class="h-3.5 w-3.5"></i>
+        <span class="underline decoration-slate-700 hover:decoration-accent" data-trn="adminToggleBtn">ORGANIZER CONTROL PANEL</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- STANDALONE JS CORE CONTROLLER -->
+  <script>
+    // 1. Language Translation Dictionary
+    const TRANSLATIONS = {
+      en: {
+        navTitle: "3rB TOURNAMENT",
+        heroBadge: "3rB ESPORTS PRESENTS",
+        heroTitle: "3rB CHAMPIONS ARENA",
+        heroSubtitle: "Register now, climb the ranks, and secure ultimate glory in the 3rB Gaming Tournament.",
+        langToggle: "العربية",
+        phase1Title: "Registration Live",
+        phase2Title: "Leaderboard & Results",
+        formTitle: "PLAYER REGISTRATION",
+        formSubtitle: "Fill in your official gaming credentials to register for the tournament.",
+        ignLabel: "In-Game Name (IGN)",
+        ignPlaceholder: "e.g., ShadowSlayer",
+        playerIdLabel: "Player ID",
+        playerIdPlaceholder: "e.g., 987654321",
+        discordLabel: "Discord Tag",
+        discordPlaceholder: "e.g., shadow#1234",
+        avatarLabel: "In-Game Account Screenshot",
+        avatarPlaceholder: "Upload your screenshot",
+        avatarOrPreset: "— OR SELECT A PRESET HERO AVATAR —",
+        presetAvatarLabel: "Select a pre-set avatar style:",
+        screenshotHelper: "Please upload a clear screenshot of your in-game profile or stats page.",
+        submitButton: "JOIN THE ARENA",
+        submittingButton: "REGISTERING...",
+        successMessage: "🎉 Registration successful! Welcome to the Arena.",
+        validationError: "⚠️ Please fill out all required fields correctly.",
+        duplicateIdError: "⚠️ A player with this Player ID or Name is already registered.",
+        leaderboardTitle: "THE LEADERBOARD",
+        leaderboardSubtitle: "Real-time standings of the 3rB Gaming Tournament arena.",
+        rankCol: "RANK",
+        playerCol: "PLAYER",
+        scoreCol: "SCORE",
+        noPlayers: "No champions registered yet. The arena awaits its first hero!",
+        searchPlaceholder: "Search players by IGN or Player ID...",
+        viewDetails: "View profile info",
+        outOfTen: "/10",
+        modalTitle: "CHAMPION PROFILE",
+        joinedAt: "Registered On",
+        discordLabelModal: "Discord Profile",
+        playerIdLabelModal: "Official Player ID",
+        scoreLabelModal: "Arena Score",
+        rankLabelModal: "Current Standing",
+        closeBtn: "CLOSE PROFILE",
+        adminToggleBtn: "ORGANIZER CONTROL PANEL",
+        adminTitle: "3rB TOURNAMENT ORGANIZER PORTAL",
+        adminSubtitle: "Manage phases, adjust player scores, and seed mock data.",
+        adminPhaseLabel: "Active Tournament Phase:",
+        phase1Select: "Phase 1: Registration Open",
+        phase2Select: "Phase 2: Leaderboard & Results",
+        adminPlayerListTitle: "Registered Champions & Score Management",
+        adminSearchPlaceholder: "Filter registered list...",
+        scoreInputLabel: "Set Score (0-10)",
+        updateScoreBtn: "Save",
+        deletePlayerBtn: "Remove",
+        resetAllBtn: "Reset Tournament Data",
+        resetConfirm: "Are you sure you want to delete all player registrations? This cannot be undone.",
+        deleteConfirm: "Remove this player from the tournament?",
+        seedPlayersBtn: "Seed Demo Players",
+        adminOnlyNote: "This panel simulates the organizer dashboard. Changes immediately persist to local storage.",
+        passwordPromptTitle: "Admin Authentication",
+        passwordLabel: "Enter Admin Password",
+        passwordPlaceholder: "Password",
+        submitPasswordBtn: "Unlock Dashboard",
+        invalidPasswordError: "⚠️ Invalid password. Please try again.",
+        closeAdminBtn: "Close Panel",
+        bgManagerTitle: "Custom Background Manager",
+        bgUrlLabel: "Paste Media URL (Image, GIF, MP4/WebM)",
+        bgUrlPlaceholder: "e.g., https://assets.codepen.io/32795/codepen_bg_video.mp4",
+        bgTypeLabel: "Background Type",
+        bgTypeStatic: "Static Image",
+        bgTypeGif: "Animated GIF",
+        bgTypeVideo: "Live Video (MP4/WebM)",
+        bgUpdateBtn: "Update Background",
+        bgResetBtn: "Reset to Default Canvas",
+        bgAccentLabel: "Accent Color Theme",
+        bgAccentDefault: "Neon Purple (Default)",
+        bgAccentCyan: "Cyber Cyan",
+        bgAccentGold: "Champion Gold",
+        bgAccentRed: "Ruby Red",
+        bgAccentGreen: "Emerald Green",
+        bgAccentOrange: "Apex Orange",
+      },
+      ar: {
+        navTitle: "بطولة 3rB",
+        heroBadge: "تقدمها رياضات 3rB الإلكترونية",
+        heroTitle: "ساحة أبطال 3rB",
+        heroSubtitle: "سجل الآن، واعتلِ المراتب، وحقق المجد المطلق في بطولة 3rB للألعاب.",
+        langToggle: "English",
+        phase1Title: "التسجيل مفتوح الآن",
+        phase2Title: "لوحة الصدارة والنتائج",
+        formTitle: "تسجيل اللاعبين",
+        formSubtitle: "أدخل بياناتك الرسمية للألعاب للتسجيل في البطولة.",
+        ignLabel: "الاسم داخل اللعبة (IGN)",
+        ignPlaceholder: "مثال: ShadowSlayer",
+        playerIdLabel: "معرّف اللاعب (Player ID)",
+        playerIdPlaceholder: "مثال: 987654321",
+        discordLabel: "حساب ديسكورد (Discord Tag)",
+        discordPlaceholder: "مثال: shadow#1234",
+        avatarLabel: "صورة حسابك داخل اللعبة",
+        avatarPlaceholder: "ارفع لقطة الشاشة الخاصة بك",
+        avatarOrPreset: "— أو اختر رمزاً جاهزاً للبطل —",
+        presetAvatarLabel: "اختر شكل الرمز الجاهز الخاص بك:",
+        screenshotHelper: "يرجى رفع لقطة شاشة واضحة لملفك الشخصي أو بيانات حسابك داخل اللعبة.",
+        submitButton: "انضم إلى الساحة",
+        submittingButton: "جاري التسجيل...",
+        successMessage: "🎉 تم التسجيل بنجاح! مرحباً بك في الساحة.",
+        validationError: "⚠️ يرجى ملء جميع الحقول المطلوبة بشكل صحيح.",
+        duplicateIdError: "⚠️ هذا اللاعب أو معرّف اللاعب مسجل بالفعل.",
+        leaderboardTitle: "لوحة الصدارة",
+        leaderboardSubtitle: "الترتيب المباشر للاعبي ساحة بطولة 3rB.",
+        rankCol: "الترتيب",
+        playerCol: "اللاعب",
+        scoreCol: "النقاط",
+        noPlayers: "لا يوجد أبطال مسجلون حتى الآن. الساحة تنتظر بطلها الأول!",
+        searchPlaceholder: "البحث عن اللاعبين بالاسم أو المعرّف...",
+        viewDetails: "عرض ملف التعريف",
+        outOfTen: "/10",
+        modalTitle: "ملف البطل",
+        joinedAt: "تاريخ التسجيل",
+        discordLabelModal: "حساب ديسكورد",
+        playerIdLabelModal: "معرّف اللاعب الرسمي",
+        scoreLabelModal: "نقاط الساحة",
+        rankLabelModal: "الترتيب الحالي",
+        closeBtn: "إغلاق الملف",
+        adminToggleBtn: "لوحة تحكم المنظم",
+        adminTitle: "بوابة تنظيم بطولة 3rB",
+        adminSubtitle: "إدارة مراحل البطولة، تعديل نقاط اللاعبين، وإضافة بيانات تجريبية.",
+        adminPhaseLabel: "مرحلة البطولة النشطة:",
+        phase1Select: "المرحلة الأولى: التسجيل مفتوح",
+        phase2Select: "المرحلة الثانية: لوحة الصدارة والنتائج",
+        adminPlayerListTitle: "الأبطال المسجلون وإدارة النقاط",
+        adminSearchPlaceholder: "تصفية القائمة المسجلة...",
+        scoreInputLabel: "تحديد النقاط (0-10)",
+        updateScoreBtn: "حفظ",
+        deletePlayerBtn: "حذف",
+        resetAllBtn: "إعادة تعيين كافة بيانات البطولة",
+        resetConfirm: "هل أنت متأكد من رغبتك في حذف كافة اللاعبين المسجلين؟ لا يمكن التراجع عن هذا الإجراء.",
+        deleteConfirm: "هل تريد حذف هذا اللاعب من البطولة؟",
+        seedPlayersBtn: "إضافة لاعبين تجريبيين",
+        adminOnlyNote: "تحاكي هذه اللوحة واجهة المنظم. تُحفظ التغييرات تلقائياً في التخزين المحلي للمتصفح.",
+        passwordPromptTitle: "التحقق من هوية المشرف",
+        passwordLabel: "أدخل كلمة مرور المشرف",
+        passwordPlaceholder: "كلمة المرور",
+        submitPasswordBtn: "فتح لوحة التحكم",
+        invalidPasswordError: "⚠️ كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.",
+        closeAdminBtn: "إغلاق اللوحة",
+        bgManagerTitle: "إدارة الخلفية المخصصة",
+        bgUrlLabel: "رابط ملف الميديا (صورة، صورة متحركة GIF، أو فيديو MP4/WebM)",
+        bgUrlPlaceholder: "مثال: https://assets.codepen.io/32795/codepen_bg_video.mp4",
+        bgTypeLabel: "نوع الخلفية",
+        bgTypeStatic: "صورة ثابتة / Static Image",
+        bgTypeGif: "صورة متحركة GIF / Animated GIF",
+        bgTypeVideo: "فيديو متحرك / Live Video",
+        bgUpdateBtn: "تحديث الخلفية",
+        bgResetBtn: "استعادة الخلفية الافتراضية",
+        bgAccentLabel: "لون المظهر الرئيسي",
+        bgAccentDefault: "البنفسجي النيوني (الافتراضي)",
+        bgAccentCyan: "السيان السيبراني",
+        bgAccentGold: "الذهبي البطل",
+        bgAccentRed: "الأحمر الياقوتي",
+        bgAccentGreen: "الأخضر الزمردي",
+        bgAccentOrange: "البرتقالي الناري",
+      }
+    };
+
+    // 2. Preset High Quality Neon Avatars
+    const PRESET_AVATARS = [
+      { id: 'preset1', name: 'Phoenix', colors: 'from-orange-500 to-red-600', icon: 'flame' },
+      { id: 'preset2', name: 'Cypher', colors: 'from-cyan-400 to-blue-600', icon: 'cpu' },
+      { id: 'preset3', name: 'Vortex', colors: 'from-violet-600 to-fuchsia-600', icon: 'zap' },
+      { id: 'preset4', name: 'Slayer', colors: 'from-amber-400 to-yellow-600', icon: 'sword' },
+      { id: 'preset5', name: 'Spectre', colors: 'from-emerald-500 to-teal-700', icon: 'shield' },
+      { id: 'preset6', name: 'Warlock', colors: 'from-purple-600 to-indigo-800', icon: 'wand' },
+      { id: 'preset7', name: 'Ghost', colors: 'from-slate-600 to-slate-800', icon: 'eye-off' },
+      { id: 'preset8', name: 'Champion', colors: 'from-rose-500 to-pink-600', icon: 'trophy' },
+    ];
+
+    // 3. Accent Color Hex Constants
+    const ACCENT_THEMES = {
+      default: { primary: '#a855f7', rgb: '168, 85, 247', hover: '#c084fc' },
+      cyan: { primary: '#06b6d4', rgb: '6, 182, 212', hover: '#22d3ee' },
+      gold: { primary: '#eab308', rgb: '234, 179, 8', hover: '#fde047' },
+      red: { primary: '#ef4444', rgb: '239, 68, 68', hover: '#fca5a5' },
+      green: { primary: '#10b981', rgb: '16, 185, 129', hover: '#34d399' },
+      orange: { primary: '#f97316', rgb: '249, 115, 22', hover: '#fb923c' },
+    };
+
+    // 4. Demo Seeding Mock Data List
+    const DEMO_PLAYERS = [
+      { id: 'seed-id-0', inGameName: '3rB_ViperX', playerId: '109847291', discordTag: 'viper#4432', avatarUrl: 'preset1', score: 9.5, createdAt: Date.now() - 500000 },
+      { id: 'seed-id-1', inGameName: 'Neo_Pulse', playerId: '228394857', discordTag: 'neopulse#8899', avatarUrl: 'preset3', score: 9.0, createdAt: Date.now() - 400000 },
+      { id: 'seed-id-2', inGameName: 'Spectre_3rB', playerId: '304958172', discordTag: 'spectre#2312', avatarUrl: 'preset5', score: 8.5, createdAt: Date.now() - 300000 },
+      { id: 'seed-id-3', inGameName: 'DoomSlayer', playerId: '504938122', discordTag: 'doom#6666', avatarUrl: 'preset4', score: 8.0, createdAt: Date.now() - 200000 },
+      { id: 'seed-id-4', inGameName: 'CodeBreaker', playerId: '493827105', discordTag: 'codec#1337', avatarUrl: 'preset2', score: 7.0, createdAt: Date.now() - 150000 },
+      { id: 'seed-id-5', inGameName: 'Warlock_3rB', playerId: '883749201', discordTag: 'warlock#1101', avatarUrl: 'preset6', score: 6.5, createdAt: Date.now() - 100000 },
+      { id: 'seed-id-6', inGameName: 'AlphaGamer', playerId: '992837112', discordTag: 'alpha#7744', avatarUrl: 'preset8', score: 5.0, createdAt: Date.now() - 50000 },
+      { id: 'seed-id-7', inGameName: 'Phantom_Ghost', playerId: '773648291', discordTag: 'ghost#0099', avatarUrl: 'preset7', score: 4.5, createdAt: Date.now() - 10000 },
+    ];
+
+    // State Variables
+    let state = {
+      players: [],
+      phase: 'registration', // 'registration' | 'leaderboard'
+      lang: 'en', // 'en' | 'ar'
+      accentColor: 'default',
+      customBgUrl: '',
+      customBgType: 'static',
+      customScriptUrl: '',
+      uploadedScreenshotBase64: '',
+      activePlayerForModal: null,
+      adminTemporaryScores: {}, // id -> score mapping for unsaved score editing
+    };
+
+    // Initialization Function
+    function init() {
+      // 1. Load from localStorage or set defaults
+      state.players = JSON.parse(localStorage.getItem('3rb_tournament_players')) || [];
+      state.phase = localStorage.getItem('3rb_tournament_phase') || 'registration';
+      state.lang = localStorage.getItem('3rb_tournament_lang') || 'en';
+      state.accentColor = localStorage.getItem('3rb_accent_color') || 'default';
+      state.customBgUrl = localStorage.getItem('3rb_custom_bg_url') || '';
+      state.customBgType = localStorage.getItem('3rb_custom_bg_type') || 'static';
+      state.customScriptUrl = localStorage.getItem('3rb_custom_script_url') || '';
+      
+      // Update Footer Year
+      document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+      // Bind all Event Listeners
+      bindEvents();
+
+      // Apply Initial State
+      applyLanguage();
+      applyPhase();
+      applyAccentTheme();
+      applyBackground();
+      updatePlayerCountWidgets();
+      
+      // Auto fetch live scores and configs
+      fetchLivePlayers();
+      setInterval(fetchLivePlayers, 15000); // Polling every 15s for live sync
+      
+      // Initialize Lucide Icons
+      lucide.createIcons();
+    }
+
+    // Bind DOM events
+    function bindEvents() {
+      // Language Toggle
+      document.getElementById('lang-toggle-btn').addEventListener('click', () => {
+        state.lang = state.lang === 'en' ? 'ar' : 'en';
+        localStorage.setItem('3rb_tournament_lang', state.lang);
+        applyLanguage();
+      });
+
+      // Top Phase Select Button Click
+      document.getElementById('btn-phase-reg').addEventListener('click', () => {
+        state.phase = 'registration';
+        localStorage.setItem('3rb_tournament_phase', state.phase);
+        applyPhase();
+      });
+      document.getElementById('btn-phase-ldr').addEventListener('click', () => {
+        state.phase = 'leaderboard';
+        localStorage.setItem('3rb_tournament_phase', state.phase);
+        applyPhase();
+      });
+
+      // Drag & Drop / File Input events for registration screenshot
+      const fileInput = document.getElementById('screenshot-file-input');
+      const uploadBox = document.getElementById('screenshot-upload-box');
+      
+      uploadBox.addEventListener('click', () => {
+        fileInput.click();
+      });
+      
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      uploadBox.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadBox.classList.add('border-accent', 'bg-accent/10');
+      });
+
+      uploadBox.addEventListener('dragleave', () => {
+        uploadBox.classList.remove('border-accent', 'bg-accent/10');
+      });
+
+      uploadBox.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadBox.classList.remove('border-accent', 'bg-accent/10');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      // Clear screenshot
+      document.getElementById('clear-screenshot-btn').addEventListener('click', () => {
+        state.uploadedScreenshotBase64 = '';
+        document.getElementById('screenshot-preview-box').classList.add('hidden');
+        document.getElementById('screenshot-upload-box').classList.remove('hidden');
+        fileInput.value = '';
+      });
+
+      // Submit registration
+      document.getElementById('reg-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitRegistration();
+      });
+
+      // Search standing
+      document.getElementById('leaderboard-search').addEventListener('input', (e) => {
+        renderLeaderboard(e.target.value);
+      });
+
+      // Modal Closures (Universal close trigger)
+      document.querySelectorAll('.modal-backdrop, .modal-close-btn').forEach(element => {
+        element.addEventListener('click', () => {
+          closeAllModals();
+        });
+      });
+
+      // Admin Auth Unlock Password Form Submit
+      document.getElementById('footer-admin-btn').addEventListener('click', () => {
+        showModal('modal-admin-auth');
+      });
+      document.getElementById('admin-auth-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const pwd = document.getElementById('input-admin-password').value;
+        if (pwd === 'admin3rb' || pwd === '3rb') {
+          closeAllModals();
+          document.getElementById('input-admin-password').value = '';
+          openAdminPanel();
+        } else {
+          const errBox = document.getElementById('admin-auth-error');
+          errBox.classList.remove('hidden');
+          setTimeout(() => errBox.classList.add('hidden'), 3000);
+        }
+      });
+
+      // Admin Controls: Phase select inside panel
+      document.getElementById('admin-select-phase1').addEventListener('click', async () => {
+        state.phase = 'registration';
+        localStorage.setItem('3rb_tournament_phase', state.phase);
+        applyPhase();
+        updateAdminPanelActivePhase();
+        await saveConfigToSheet('tournament_phase', 'registration');
+      });
+      document.getElementById('admin-select-phase2').addEventListener('click', async () => {
+        state.phase = 'leaderboard';
+        localStorage.setItem('3rb_tournament_phase', state.phase);
+        applyPhase();
+        updateAdminPanelActivePhase();
+        await saveConfigToSheet('tournament_phase', 'leaderboard');
+      });
+
+      // Admin Controls: Seed demo players
+      document.getElementById('admin-btn-seed').addEventListener('click', async () => {
+        state.players = DEMO_PLAYERS.map(p => ({
+          ...p,
+          createdAt: Date.now() - Math.random() * 86400000
+        }));
+        state.phase = 'leaderboard';
+        savePlayers();
+        applyPhase();
+        updateAdminPanelActivePhase();
+        renderAdminPlayersTable();
+        await saveConfigToSheet('tournament_phase', 'leaderboard');
+        showAdminToast('Seed Successful', 'إضافة لاعبين تجريبيين ناجحة', 'Loaded 8 mock gaming champions.');
+      });
+
+      // Admin Controls: Reset tournament data
+      document.getElementById('admin-btn-reset').addEventListener('click', async () => {
+        const confirmMsg = state.lang === 'ar' ? TRANSLATIONS.ar.resetConfirm : TRANSLATIONS.en.resetConfirm;
+        if (confirm(confirmMsg)) {
+          state.players = [];
+          state.phase = 'registration';
+          savePlayers();
+          applyPhase();
+          updateAdminPanelActivePhase();
+          renderAdminPlayersTable();
+          
+          // Reset Sheets if connected
+          if (state.customScriptUrl) {
+            try {
+              await fetch(state.customScriptUrl, {
+                method: 'POST',
+                mode: 'cors',
+                body: JSON.stringify({ action: 'resetAll' })
+              });
+              await saveConfigToSheet('tournament_phase', 'registration');
+            } catch (err) {
+              console.error(err);
+            }
+          }
+          
+          showAdminToast('Tournament Reset', 'تمت إعادة تهيئة البيانات', 'All local registries cleared.');
+        }
+      });
+
+      // Admin Controls: Google Sheet Connect
+      document.getElementById('btn-save-script-url').addEventListener('click', () => {
+        const url = document.getElementById('input-script-url').value.trim();
+        state.customScriptUrl = url;
+        localStorage.setItem('3rb_custom_script_url', url);
+        fetchLivePlayers();
+        showAdminToast('Connected Successfully', 'تم الحفظ والاتصال', 'Live Google Sheets sync pipeline is active.');
+      });
+
+      // Admin Controls: Save custom background
+      document.getElementById('btn-save-bg').addEventListener('click', async () => {
+        const url = document.getElementById('input-bg-url').value.trim();
+        const type = document.getElementById('select-bg-type').value;
+        state.customBgUrl = url;
+        state.customBgType = type;
+        localStorage.setItem('3rb_custom_bg_url', url);
+        localStorage.setItem('3rb_custom_bg_type', type);
+        applyBackground();
+        await saveConfigToSheet('background_url', url);
+        await saveConfigToSheet('background_type', type);
+        showAdminToast('Background Updated', 'تم تحديث الخلفية بنجاح', 'The ambient environment was modified.');
+      });
+
+      // Admin Controls: Reset background to standard
+      document.getElementById('btn-reset-bg').addEventListener('click', async () => {
+        state.customBgUrl = '';
+        state.customBgType = 'static';
+        document.getElementById('input-bg-url').value = '';
+        document.getElementById('select-bg-type').value = 'static';
+        localStorage.setItem('3rb_custom_bg_url', '');
+        localStorage.setItem('3rb_custom_bg_type', 'static');
+        applyBackground();
+        await saveConfigToSheet('background_url', '');
+        await saveConfigToSheet('background_type', 'static');
+        showAdminToast('Background Reset', 'تم استرجاع الخلفية الافتراضية', 'Returned to standard galactic canvas.');
+      });
+
+      // Admin Controls: Change accent theme color
+      document.getElementById('select-accent-theme').addEventListener('change', async (e) => {
+        state.accentColor = e.target.value;
+        localStorage.setItem('3rb_accent_color', state.accentColor);
+        applyAccentTheme();
+        await saveConfigToSheet('accent_color', state.accentColor);
+      });
+
+      // Admin Panel Search input filter
+      document.getElementById('admin-search-input').addEventListener('input', () => {
+        renderAdminPlayersTable();
+      });
+
+      // Admin Close Panels buttons
+      document.getElementById('admin-panel-close-btn').addEventListener('click', () => {
+        closeAllModals();
+      });
+
+      // Admin Panel Bulk Score update
+      document.getElementById('admin-panel-bulk-save-btn').addEventListener('click', async () => {
+        // Apply temporary score edits inside table to state.players
+        let hasChanges = false;
+        state.players = state.players.map(p => {
+          if (state.adminTemporaryScores[p.id] !== undefined) {
+            hasChanges = true;
+            return { ...p, score: state.adminTemporaryScores[p.id] };
+          }
+          return p;
+        });
+
+        if (hasChanges) {
+          savePlayers();
+          renderLeaderboard();
+          
+          // Send bulk scores to Google Sheet if active
+          if (state.customScriptUrl) {
+            try {
+              await fetch(state.customScriptUrl, {
+                method: 'POST',
+                mode: 'cors',
+                body: JSON.stringify({
+                  action: 'updateScores',
+                  scores: state.adminTemporaryScores
+                })
+              });
+              fetchLivePlayers();
+            } catch (err) {
+              console.error(err);
+            }
+          }
+        }
+
+        showAdminToast('Standings Saved', 'تم تحديث لوحة الصدارة', 'All player scores updated successfully.');
+      });
+    }
+
+    // File Input utility converting to Base64
+    function handleFile(file) {
+      const errContainer = document.getElementById('form-alert-container');
+      errContainer.classList.add('hidden');
+      
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        showFormAlert(state.lang === 'ar' ? '⚠️ يرجى اختيار ملف صورة صالح.' : '⚠️ Please select a valid image file.', false);
+        return;
+      }
+      if (file.size > 3 * 1024 * 1024) {
+        showFormAlert(state.lang === 'ar' ? '⚠️ حجم الصورة كبير جداً. يرجى اختيار صورة أقل من 3 ميجابايت.' : '⚠️ Screenshot is too large. Please select an image under 3MB.', false);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        state.uploadedScreenshotBase64 = e.target.result;
+        document.getElementById('screenshot-img').src = state.uploadedScreenshotBase64;
+        document.getElementById('preview-file-name').textContent = file.name;
+        document.getElementById('screenshot-upload-box').classList.add('hidden');
+        document.getElementById('screenshot-preview-box').classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Submit player registrations
+    async function submitRegistration() {
+      const ign = document.getElementById('input-ign').value.trim();
+      const playerId = document.getElementById('input-player-id').value.trim();
+      const discord = document.getElementById('input-discord').value.trim();
+      const screenshot = state.uploadedScreenshotBase64;
+
+      const activeTrn = TRANSLATIONS[state.lang];
+
+      if (!ign || !playerId || !discord || !screenshot) {
+        showFormAlert(activeTrn.validationError, false);
+        return;
+      }
+
+      // Check Duplicates
+      const isDuplicate = state.players.some(p => 
+        p.playerId.toLowerCase() === playerId.toLowerCase() || 
+        p.inGameName.toLowerCase() === ign.toLowerCase()
+      );
+
+      if (isDuplicate) {
+        showFormAlert(activeTrn.duplicateIdError, false);
+        return;
+      }
+
+      const btnSubmit = document.getElementById('reg-submit-btn');
+      btnSubmit.textContent = activeTrn.submittingButton;
+      btnSubmit.disabled = true;
+
+      const newPlayer = {
+        id: 'player-' + Math.random().toString(36).substring(2, 11),
+        inGameName: ign,
+        playerId: playerId,
+        discordTag: discord,
+        avatarUrl: screenshot,
+        score: 0,
+        createdAt: Date.now()
+      };
+
+      // Submit online if script is active
+      if (state.customScriptUrl) {
+        try {
+          const res = await fetch(state.customScriptUrl, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+              action: 'register',
+              inGameName: ign,
+              playerId: playerId,
+              discordTag: discord,
+              avatarUrl: screenshot
+            })
+          });
+          const resData = await res.json();
+          if (resData && resData.status === 'success') {
+            fetchLivePlayers();
+            showRegistrationSuccess();
+          } else if (resData && resData.message === 'duplicate') {
+            showFormAlert(activeTrn.duplicateIdError, false);
+          } else {
+            showFormAlert(resData.message || 'Registration failed', false);
+          }
+        } catch (err) {
+          showFormAlert(state.lang === 'ar' ? '⚠️ فشل الاتصال بقاعدة بيانات جوجل.' : '⚠️ Failed to connect to Google Sheet database.', false);
+        } finally {
+          btnSubmit.textContent = activeTrn.submitButton;
+          btnSubmit.disabled = false;
+        }
+      } else {
+        // Local Save Fallback
+        state.players.unshift(newPlayer);
+        savePlayers();
+        showRegistrationSuccess();
+        btnSubmit.textContent = activeTrn.submitButton;
+        btnSubmit.disabled = false;
+      }
+    }
+
+    function showRegistrationSuccess() {
+      const activeTrn = TRANSLATIONS[state.lang];
+      showFormAlert(activeTrn.successMessage, true);
+      
+      // Clear Form Fields
+      document.getElementById('input-ign').value = '';
+      document.getElementById('input-player-id').value = '';
+      document.getElementById('input-discord').value = '';
+      state.uploadedScreenshotBase64 = '';
+      document.getElementById('screenshot-preview-box').classList.add('hidden');
+      document.getElementById('screenshot-upload-box').classList.remove('hidden');
+      document.getElementById('screenshot-file-input').value = '';
+      
+      updatePlayerCountWidgets();
+      renderLeaderboard();
+    }
+
+    function showFormAlert(message, isSuccess) {
+      const alert = document.getElementById('form-alert-container');
+      alert.className = `mb-6 rounded-xl border p-3.5 text-xs font-bold flex items-center gap-2 ${
+        isSuccess 
+          ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400' 
+          : 'border-red-500/20 bg-red-500/10 text-red-400'
+      }`;
+      alert.innerHTML = `<span>${message}</span>`;
+      alert.classList.remove('hidden');
+    }
+
+    // Save configuration settings dynamically to the central master sheet
+    async function saveConfigToSheet(key, value) {
+      if (!state.customScriptUrl) return;
+      try {
+        await fetch(state.customScriptUrl, {
+          method: 'POST',
+          mode: 'cors',
+          body: JSON.stringify({
+            action: 'updateSetting',
+            key: key,
+            value: value
+          })
+        });
+      } catch (err) {
+        console.error('Failed to sync setting to Google Sheets:', err);
+      }
+    }
+
+    // Google Apps Script Pull Synchronization
+    async function fetchLivePlayers() {
+      if (!state.customScriptUrl) return;
+      try {
+        const response = await fetch(state.customScriptUrl);
+        const data = await response.json();
+        if (data) {
+          if (data.players) {
+            state.players = data.players;
+            savePlayers(false); // save locally without re-triggering script
+            renderLeaderboard();
+            updatePlayerCountWidgets();
+            if (document.getElementById('modal-admin-panel').classList.contains('hidden') === false) {
+              renderAdminPlayersTable();
+            }
+          }
+          if (data.backgroundUrl !== undefined) {
+            state.customBgUrl = data.backgroundUrl;
+            localStorage.setItem('3rb_custom_bg_url', data.backgroundUrl);
+            applyBackground();
+            const bgInput = document.getElementById('input-bg-url');
+            if (bgInput && document.activeElement !== bgInput) {
+              bgInput.value = data.backgroundUrl;
+            }
+          }
+          if (data.backgroundType !== undefined) {
+            state.customBgType = data.backgroundType;
+            localStorage.setItem('3rb_custom_bg_type', data.backgroundType);
+            applyBackground();
+            const bgTypeSelect = document.getElementById('select-bg-type');
+            if (bgTypeSelect) {
+              bgTypeSelect.value = data.backgroundType;
+            }
+          }
+          if (data.tournamentPhase !== undefined) {
+            state.phase = data.tournamentPhase;
+            localStorage.setItem('3rb_tournament_phase', data.tournamentPhase);
+            applyPhase();
+            updateAdminPanelActivePhase();
+          }
+          if (data.accentColor !== undefined) {
+            state.accentColor = data.accentColor;
+            localStorage.setItem('3rb_accent_color', data.accentColor);
+            applyAccentTheme();
+            const accentSelect = document.getElementById('select-accent-theme');
+            if (accentSelect) {
+              accentSelect.value = data.accentColor;
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Spreadsheet sync failure:', err);
+      }
+    }
+
+    // Save Players to LocalStorage
+    function savePlayers(syncToSheet = true) {
+      localStorage.setItem('3rb_tournament_players', JSON.stringify(state.players));
+      updatePlayerCountWidgets();
+    }
+
+    function updatePlayerCountWidgets() {
+      document.getElementById('live-player-count').textContent = state.players.length;
+      document.getElementById('stat-registered-count').textContent = state.players.length;
+      document.getElementById('stat-graded-count').textContent = state.players.filter(p => p.score > 0).length;
+    }
+
+    // Render Standings Board
+    function renderLeaderboard(filterString = '') {
+      const tbody = document.getElementById('leaderboard-tbody');
+      const emptyState = document.getElementById('leaderboard-empty-state');
+      
+      tbody.innerHTML = '';
+
+      // Sort Descending by Score, then by Register time
+      let sorted = [...state.players].sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.createdAt - b.createdAt;
+      });
+
+      if (filterString.trim()) {
+        const f = filterString.toLowerCase().trim();
+        sorted = sorted.filter(p => p.inGameName.toLowerCase().includes(f) || p.playerId.toLowerCase().includes(f));
+      }
+
+      if (sorted.length === 0) {
+        tbody.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      tbody.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+
+      sorted.forEach((player, index) => {
+        const rank = index + 1;
+        let badgeHTML = `<span class="font-mono font-bold text-slate-400">${rank}</span>`;
+        
+        // Custom Rank badges styling
+        if (rank === 1) {
+          badgeHTML = `<span class="flex h-6 w-6 items-center justify-center rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 font-mono font-black shadow-lg shadow-yellow-500/5">1</span>`;
+        } else if (rank === 2) {
+          badgeHTML = `<span class="flex h-6 w-6 items-center justify-center rounded-full bg-slate-300/10 border border-slate-300/20 text-slate-300 font-mono font-black shadow-lg shadow-slate-300/5">2</span>`;
+        } else if (rank === 3) {
+          badgeHTML = `<span class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-600/10 border border-amber-600/20 text-amber-500 font-mono font-black shadow-lg shadow-amber-500/5">3</span>`;
+        }
+
+        // Get avatar preset or photo preview
+        let avatarHTML = '';
+        if (player.avatarUrl && player.avatarUrl.startsWith('preset')) {
+          const preset = PRESET_AVATARS.find(p => p.id === player.avatarUrl) || PRESET_AVATARS[0];
+          avatarHTML = `<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${preset.colors} text-white font-black uppercase text-[10px] shadow shrink-0"><i data-lucide="${preset.icon}" class="h-3.5 w-3.5"></i></div>`;
+        } else {
+          avatarHTML = `<div class="h-8 w-8 rounded-lg overflow-hidden border border-slate-800 bg-slate-950/80 p-0.5 shrink-0"><img src="${player.avatarUrl}" class="w-full h-full object-cover rounded" referrerPolicy="no-referrer"></div>`;
+        }
+
+        const isAr = state.lang === 'ar';
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-accent/[0.02] transition-colors cursor-pointer group';
+        tr.onclick = () => openPlayerDetailsModal(player.id);
+        
+        tr.innerHTML = `
+          <td class="p-4 sm:p-5 flex justify-center items-center h-16">${badgeHTML}</td>
+          <td class="p-4 sm:p-5 font-bold text-white">
+            <div class="flex items-center gap-3">
+              ${avatarHTML}
+              <div class="flex flex-col min-w-0">
+                <span class="truncate text-sm tracking-wide font-mono">${player.inGameName}</span>
+                <span class="text-[9px] text-slate-500 font-normal mt-0.5 font-mono">ID: ${player.playerId}</span>
+              </div>
+            </div>
+          </td>
+          <td class="p-4 sm:p-5 text-center font-mono">
+            <div class="flex items-center justify-center gap-2">
+              <span class="text-sm font-black text-accent">${player.score.toFixed(1)}</span>
+              <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">${TRANSLATIONS[state.lang].outOfTen}</span>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Update newly added icons
+      lucide.createIcons();
+    }
+
+    // Modal Control Utils
+    function showModal(id) {
+      closeAllModals();
+      const modal = document.getElementById(id);
+      modal.classList.remove('hidden');
+    }
+
+    function closeAllModals() {
+      document.getElementById('modal-player-details').classList.add('hidden');
+      document.getElementById('modal-admin-auth').classList.add('hidden');
+      document.getElementById('modal-admin-panel').classList.add('hidden');
+    }
+
+    // Player Profile Modal Open
+    function openPlayerDetailsModal(playerId) {
+      const player = state.players.find(p => p.id === playerId);
+      if (!player) return;
+
+      const activeTrn = TRANSLATIONS[state.lang];
+      
+      // Calculate rank
+      const sorted = [...state.players].sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return a.createdAt - b.createdAt;
+      });
+      const rank = sorted.findIndex(p => p.id === playerId) + 1;
+
+      document.getElementById('modal-player-ign').textContent = player.inGameName;
+      document.getElementById('modal-player-rank').textContent = '#' + rank;
+      document.getElementById('modal-player-score').textContent = `${player.score.toFixed(1)} / 10`;
+      document.getElementById('modal-player-id').textContent = player.playerId;
+      document.getElementById('modal-player-discord').textContent = player.discordTag;
+      
+      // Format Date
+      const d = new Date(player.createdAt);
+      const formattedDate = d.toLocaleDateString(state.lang === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      document.getElementById('modal-player-date').textContent = formattedDate;
+
+      const img = document.getElementById('modal-player-screenshot');
+      const avatarPreset = document.getElementById('modal-player-preset-avatar');
+
+      if (player.avatarUrl && player.avatarUrl.startsWith('preset')) {
+        img.classList.add('hidden');
+        avatarPreset.classList.remove('hidden');
+        const preset = PRESET_AVATARS.find(p => p.id === player.avatarUrl) || PRESET_AVATARS[0];
+        avatarPreset.className = `text-center p-6 rounded-lg text-xs font-mono font-bold bg-gradient-to-r ${preset.colors} text-white`;
+        avatarPreset.innerHTML = `<i data-lucide="${preset.icon}" class="h-6 w-6 mx-auto mb-2"></i> ${preset.name} Preset Avatar`;
+      } else {
+        avatarPreset.classList.add('hidden');
+        img.classList.remove('hidden');
+        img.src = player.avatarUrl;
+      }
+
+      showModal('modal-player-details');
+      lucide.createIcons();
+    }
+
+    // Admin Access Management
+    function openAdminPanel() {
+      // Load spreadsheet url and background inputs
+      document.getElementById('input-script-url').value = state.customScriptUrl;
+      document.getElementById('input-bg-url').value = state.customBgUrl;
+      document.getElementById('select-bg-type').value = state.customBgType;
+      document.getElementById('select-accent-theme').value = state.accentColor;
+
+      // Copy actual score state into temporary scores variables for panel editing
+      state.adminTemporaryScores = {};
+      state.players.forEach(p => {
+        state.adminTemporaryScores[p.id] = p.score;
+      });
+
+      updateAdminPanelActivePhase();
+      renderAdminPlayersTable();
+      updatePlayerCountWidgets();
+      showModal('modal-admin-panel');
+    }
+
+    function updateAdminPanelActivePhase() {
+      const activeBtnClass = 'border-accent bg-accent/10 text-accent font-bold';
+      const defaultBtnClass = 'border-slate-800 bg-slate-900/50 text-slate-400 hover:bg-slate-900';
+
+      const p1Btn = document.getElementById('admin-select-phase1');
+      const p2Btn = document.getElementById('admin-select-phase2');
+
+      if (state.phase === 'registration') {
+        p1Btn.className = `w-full rounded-xl border p-3.5 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer text-center ${activeBtnClass}`;
+        p2Btn.className = `w-full rounded-xl border p-3.5 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer text-center ${defaultBtnClass}`;
+      } else {
+        p1Btn.className = `w-full rounded-xl border p-3.5 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer text-center ${defaultBtnClass}`;
+        p2Btn.className = `w-full rounded-xl border p-3.5 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer text-center ${activeBtnClass}`;
+      }
+    }
+
+    // Render registered lists inside Organizer portal
+    function renderAdminPlayersTable() {
+      const tbody = document.getElementById('admin-players-tbody');
+      tbody.innerHTML = '';
+
+      const query = document.getElementById('admin-search-input').value.trim().toLowerCase();
+      let filtered = [...state.players];
+      if (query) {
+        filtered = filtered.filter(p => p.inGameName.toLowerCase().includes(query) || p.playerId.toLowerCase().includes(query));
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500 font-semibold font-mono">NO CHAMPIONS REGISTERED</td></tr>`;
+        return;
+      }
+
+      filtered.forEach((player, index) => {
+        const scoreVal = state.adminTemporaryScores[player.id] !== undefined ? state.adminTemporaryScores[player.id] : player.score;
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-accent/[0.01] transition-all border-b border-slate-900';
+        tr.innerHTML = `
+          <td class="p-3.5 text-center font-mono font-bold text-slate-500">${index + 1}</td>
+          <td class="p-3.5 font-bold text-white">
+            <div class="flex items-center gap-2">
+              <span class="truncate max-w-[120px]">${player.inGameName}</span>
+              <span class="font-mono text-[9px] text-slate-500 bg-slate-900 px-1.5 py-0.5 rounded">ID: ${player.playerId}</span>
+            </div>
+          </td>
+          <td class="p-3.5 text-center font-mono text-accent font-bold text-sm">${player.score.toFixed(1)} / 10</td>
+          <td class="p-3.5">
+            <div class="flex items-center justify-center gap-2">
+              <input type="range" min="0" max="10" step="0.5" value="${scoreVal}" class="w-24 sm:w-32 h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-accent" oninput="handleAdminScoreSliderChange('${player.id}', this.value)">
+              <input type="number" min="0" max="10" step="0.5" value="${scoreVal}" class="w-12 text-center rounded bg-slate-900 border border-slate-800 text-xs font-mono py-1 font-bold text-white focus:outline-none focus:border-accent" oninput="handleAdminScoreSliderChange('${player.id}', this.value)">
+            </div>
+          </td>
+          <td class="p-3.5">
+            <div class="flex items-center justify-center gap-1.5">
+              <button type="button" onclick="handleAdminSingleSave('${player.id}')" class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 transition-all cursor-pointer border border-emerald-500/20" title="Save">
+                <i data-lucide="check" class="h-3.5 w-3.5"></i>
+              </button>
+              <button type="button" onclick="handleAdminDelete('${player.id}')" class="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-all cursor-pointer border border-red-500/20" title="Delete">
+                <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      lucide.createIcons();
+    }
+
+    // Scope handlers inside admin rows
+    window.handleAdminScoreSliderChange = function(playerId, val) {
+      let score = parseFloat(val);
+      if (isNaN(score)) score = 0;
+      if (score < 0) score = 0;
+      if (score > 10) score = 10;
+      state.adminTemporaryScores[playerId] = score;
+    };
+
+    window.handleAdminSingleSave = async function(playerId) {
+      const targetScore = state.adminTemporaryScores[playerId] !== undefined ? state.adminTemporaryScores[playerId] : 0;
+      state.players = state.players.map(p => {
+        if (p.id === playerId) {
+          return { ...p, score: targetScore };
+        }
+        return p;
+      });
+
+      savePlayers();
+      renderLeaderboard();
+      renderAdminPlayersTable();
+
+      // Submit specific player score update online
+      if (state.customScriptUrl) {
+        try {
+          await fetch(state.customScriptUrl, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({
+              action: 'updateScores',
+              scores: { [playerId]: targetScore }
+            })
+          });
+          fetchLivePlayers();
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      showAdminToast('Score Saved', 'تم حفظ الدرجة بنجاح', `Updated score to ${targetScore}.`);
+    };
+
+    window.handleAdminDelete = async function(playerId) {
+      const confirmMsg = state.lang === 'ar' ? TRANSLATIONS.ar.deleteConfirm : TRANSLATIONS.en.deleteConfirm;
+      if (confirm(confirmMsg)) {
+        state.players = state.players.filter(p => p.id !== playerId);
+        delete state.adminTemporaryScores[playerId];
+        savePlayers();
+        renderLeaderboard();
+        renderAdminPlayersTable();
+
+        // Submit deletion online
+        if (state.customScriptUrl) {
+          try {
+            await fetch(state.customScriptUrl, {
+              method: 'POST',
+              mode: 'cors',
+              body: JSON.stringify({
+                action: 'deletePlayer',
+                id: playerId
+              })
+            });
+            fetchLivePlayers();
+          } catch (err) {
+            console.error(err);
+          }
+        }
+
+        showAdminToast('Player Removed', 'تم حذف اللاعب', 'Champion registry removed from database.');
+      }
+    };
+
+    function showAdminToast(enTitle, arTitle, enDesc) {
+      const toast = document.getElementById('admin-toast-alert');
+      const title = document.getElementById('admin-toast-title');
+      const desc = document.getElementById('admin-toast-desc');
+
+      title.textContent = state.lang === 'ar' ? arTitle : enTitle;
+      desc.textContent = enDesc;
+
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 4000);
+    }
+
+    // Apply active tournament phases
+    function applyPhase() {
+      const regSection = document.getElementById('view-registration');
+      const ldrSection = document.getElementById('view-leaderboard');
+
+      const btnReg = document.getElementById('btn-phase-reg');
+      const btnLdr = document.getElementById('btn-phase-ldr');
+
+      const activeBtnStyle = 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white shadow-lg shadow-purple-500/20';
+      const inactiveBtnStyle = 'text-slate-400 hover:text-slate-200';
+
+      if (state.phase === 'registration') {
+        regSection.classList.remove('hidden');
+        ldrSection.classList.add('hidden');
+        
+        btnReg.className = `flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${activeBtnStyle}`;
+        btnLdr.className = `flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${inactiveBtnStyle}`;
+      } else {
+        regSection.classList.add('hidden');
+        ldrSection.classList.remove('hidden');
+        
+        btnReg.className = `flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${inactiveBtnStyle}`;
+        btnLdr.className = `flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${activeBtnStyle}`;
+        renderLeaderboard();
+      }
+    }
+
+    // Custom Live Background Application
+    function applyBackground() {
+      const customLayer = document.getElementById('bg-custom-layer');
+      
+      if (!state.customBgUrl) {
+        customLayer.classList.add('opacity-0');
+        customLayer.innerHTML = '';
+        return;
+      }
+
+      customLayer.classList.remove('opacity-0');
+      
+      if (state.customBgType === 'video') {
+        customLayer.innerHTML = `
+          <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
+            <source src="${state.customBgUrl}" type="video/mp4">
+            <source src="${state.customBgUrl}" type="video/webm">
+          </video>
+          <div class="absolute inset-0 bg-black/50"></div>
+        `;
+      } else {
+        // static image or gif
+        customLayer.innerHTML = `
+          <div class="absolute inset-0 w-full h-full bg-cover bg-center" style="background-image: url('${state.customBgUrl}');"></div>
+          <div class="absolute inset-0 bg-black/60"></div>
+        `;
+      }
+    }
+
+    // Accent Theme styles applicator
+    function applyAccentTheme() {
+      const theme = ACCENT_THEMES[state.accentColor] || ACCENT_THEMES.default;
+      const styles = document.getElementById('dynamic-accent-styles');
+      
+      styles.innerHTML = `
+        :root {
+          --accent-color: ${theme.primary};
+          --accent-color-rgb: ${theme.rgb};
+          --accent-color-hover: ${theme.hover};
+        }
+      `;
+    }
+
+    // Apply Bilingual Translation strings
+    function applyLanguage() {
+      const isAr = state.lang === 'ar';
+      
+      // Document attributes
+      document.documentElement.lang = state.lang;
+      document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+
+      const activeTrn = TRANSLATIONS[state.lang];
+
+      // Translate all marked elements
+      document.querySelectorAll('[data-trn]').forEach(el => {
+        const key = el.getAttribute('data-trn');
+        if (activeTrn[key]) {
+          // If the element has children/icons, preserve them and only replace textual node
+          if (el.children.length > 0) {
+            // Find text node child and replace it or do textContent replacement of non-HTML nodes
+            let textNodeFound = false;
+            for (let child of el.childNodes) {
+              if (child.nodeType === Node.TEXT_NODE && child.textContent.trim().length > 0) {
+                child.textContent = activeTrn[key];
+                textNodeFound = true;
+                break;
+              }
+            }
+            if (!textNodeFound) {
+              // Fallback appending text
+              el.innerHTML = el.innerHTML + ' ' + activeTrn[key];
+            }
+          } else {
+            el.textContent = activeTrn[key];
+          }
+        }
+      });
+
+      // Update Form Placeholders
+      document.getElementById('input-ign').placeholder = activeTrn.ignPlaceholder;
+      document.getElementById('input-player-id').placeholder = activeTrn.playerIdPlaceholder;
+      document.getElementById('input-discord').placeholder = activeTrn.discordPlaceholder;
+      document.getElementById('leaderboard-search').placeholder = activeTrn.searchPlaceholder;
+      document.getElementById('input-admin-password').placeholder = activeTrn.passwordPlaceholder;
+      document.getElementById('admin-search-input').placeholder = activeTrn.adminSearchPlaceholder;
+
+      // Update Lang Toggle Text
+      document.getElementById('lang-toggle-text').textContent = activeTrn.langToggle;
+
+      // Update static non-marked values
+      document.getElementById('upload-box-title').textContent = isAr ? 'اسحب وأسقط لقطة الشاشة هنا' : 'Drag & Drop Screenshot Here';
+      document.getElementById('upload-box-subtitle').textContent = isAr ? 'أو انقر للتصفح من جهازك' : 'or click to browse your device';
+      document.getElementById('preview-tag-text').textContent = isAr ? 'معاينة الصورة' : 'IMAGE PREVIEW';
+      document.getElementById('preview-ready-badge').textContent = isAr ? 'جاهز للإرسال' : 'READY TO SUBMIT';
+      document.getElementById('label-quick-actions').textContent = isAr ? 'إجراءات سريعة' : 'QUICK UTILITIES';
+      document.getElementById('label-metrics').textContent = isAr ? 'ملخص إحصائيات البطولة' : 'TOURNAMENT METRICS';
+      document.getElementById('stat-lbl-registered').textContent = isAr ? 'المسجلين' : 'Registered';
+      document.getElementById('stat-lbl-graded').textContent = isAr ? 'تم تقييمهم' : 'Scored';
+      document.getElementById('lbl-db-integration').textContent = isAr ? 'تكامل قاعدة البيانات (جوجل شيت)' : 'GOOGLE SHEETS LIVE DATABASE INTEGRATION';
+      document.getElementById('lbl-db-integration-desc').textContent = isAr ? 'اربط البطولة بملف Google Sheet مباشر لمشاركة بيانات اللاعبين والدرجات فوراً عبر جميع الأجهزة المتصلة.' : 'Connect your tournament to a live Google Sheet to share registrations and scores instantly across all players and devices.';
+      document.getElementById('lbl-script-url').textContent = isAr ? 'رابط تطبيق ويب Google Apps Script' : 'Google Apps Script Web App URL';
+      document.getElementById('btn-save-script-url-text').textContent = isAr ? 'حفظ والربط الآن' : 'Save & Connect';
+      document.getElementById('lbl-setup-guide-title').textContent = isAr ? '🔍 كيف يمكنني إعداد هذا مجاناً بالكامل؟ (دليل خطوة بخطوة)' : '🔍 HOW DO I SET THIS UP FOR FREE? (STEP-BY-STEP)';
+      document.getElementById('lbl-setup-guide-content').innerHTML = isAr 
+        ? `<div>1. قم بإنشاء ملف Google Sheet جديد وسمّ الأعمدة في الصف الأول كالتالي: <strong class="text-accent">id, playerId, inGameName, discordTag, avatarUrl, score, createdAt</strong>.</div>
+           <div>2. من القائمة العلوية اختر Extensions ← Apps Script. الصق رمز البرمجة الخلفي المزود.</div>
+           <div>3. اضغط Deploy ← New Deployment ← Web App. واجعل خيار الوصول لـ "Anyone". انسخ رابط تطبيق الويب.</div>
+           <div>4. الصق الرابط هنا لمزامنة التسجيل ولوحة الصدارة فوراً عبر جميع الأجهزة!</div>`
+        : `<div>1. Create a Google Sheet and name your columns in row 1: <strong class="text-accent">id, playerId, inGameName, discordTag, avatarUrl, score, createdAt</strong>.</div>
+           <div>2. Click Extensions → Apps Script. Paste the provided backend code.</div>
+           <div>3. Click Deploy → New Deployment → Web App. Set Access to "Anyone". Copy the Web App URL.</div>
+           <div>4. Paste the URL here to immediately sync registrations and leaderboard scores across the globe!</div>`;
+      
+      document.getElementById('lbl-accent-desc').textContent = isAr 
+        ? 'سيتم تطبيق لون المظهر المختار ديناميكياً على الأزرار والإطارات والعناصر المتوهجة.' 
+        : 'The selected color accent is instantly applied to all buttons, glow accents, and border frames.';
+      
+      document.getElementById('admin-tbl-lbl-champion').textContent = isAr ? 'اللاعب' : 'CHAMPION';
+      document.getElementById('admin-tbl-lbl-current-score').textContent = isAr ? 'النقاط الحالية' : 'CURRENT';
+      document.getElementById('admin-tbl-lbl-actions').textContent = isAr ? 'إجراءات' : 'ACTIONS';
+      
+      document.getElementById('lbl-close-no-save').textContent = isAr ? 'إغلاق دون حفظ' : 'Close Details';
+      document.getElementById('lbl-bulk-save').textContent = isAr ? 'تحديث لوحة الصدارة' : 'Update Leaderboard';
+
+      // Update text-alignments based on direction
+      const regForm = document.getElementById('reg-form');
+      if (isAr) {
+        regForm.querySelectorAll('input').forEach(inp => inp.className = inp.className.replace('text-left', 'text-right').replace('text-start', 'text-end'));
+      } else {
+        regForm.querySelectorAll('input').forEach(inp => inp.className = inp.className.replace('text-right', 'text-left').replace('text-end', 'text-start'));
+      }
+
+      // Re-render components with translated static texts
+      renderLeaderboard();
+      if (document.getElementById('modal-admin-panel').classList.contains('hidden') === false) {
+        renderAdminPlayersTable();
+      }
+    }
+
+    // Call init on document ready
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
