@@ -109,7 +109,7 @@
   <!-- MAIN WRAPPER -->
   <div class="relative z-10 flex flex-col min-height-screen">
     
-    <!-- HEADER (Strict Horizontal Spaced Layout Away from Edges) -->
+    <!-- HEADER -->
     <header class="w-full flex items-center justify-between p-[15px_20px] md:p-[20px_40px]">
       <!-- Left side: Language Pill & Live Status -->
       <div class="flex items-center gap-3">
@@ -389,7 +389,7 @@
     </div>
   </div>
 
-  <!-- PLAYER DETAIL PROFILE MODAL (Includes Base64 proof popup review) -->
+  <!-- PLAYER DETAIL PROFILE MODAL -->
   <div id="player-profile-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
     <div class="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 relative">
       <button onclick="closeProfileModal()" class="absolute top-4 right-4 rounded-xl border border-white/20 bg-black/60 p-2 text-gray-300 hover:text-white cursor-pointer">
@@ -490,7 +490,7 @@
       fetchLiveRecords();
       lucide.createIcons();
 
-      // Start background polling to ensure everyone sees the same sheet updates and live backgrounds!
+      // Start background polling
       setInterval(fetchLiveRecords, 10000);
     }
 
@@ -528,7 +528,7 @@
       populateLeaderboard();
     }
 
-    // Image file handler -> Converts to Base64 String
+    // Image file handler
     const fileInput = document.getElementById('file-input');
     const dropZone = document.getElementById('drop-zone');
     const previewContainer = document.getElementById('preview-container');
@@ -567,7 +567,7 @@
       previewContainer.classList.add('hidden');
     }
 
-    // Fetch live entries and backdrop directly from connected Google Sheet Web App
+    // Fetch live entries
     async function fetchLiveRecords() {
       if (!SCRIPT_URL) return;
       try {
@@ -575,14 +575,12 @@
         if (!res.ok) throw new Error('Network error');
         const data = await res.json();
         
-        // 1. Update leaderboard data
         if (data && Array.isArray(data.players)) {
           players = data.players;
           populateLeaderboard();
           updateStatsAndBadge();
         }
         
-        // 2. Dynamically apply live background across all devices!
         if (data && data.backgroundUrl) {
           document.body.style.backgroundImage = `url('${data.backgroundUrl}')`;
           localStorage.setItem('3rb_custom_bg_url', data.backgroundUrl);
@@ -602,12 +600,11 @@
       fetchLiveRecords();
     }
 
-    // Save customized backdrop background to server so everyone sees it live!
+    // Save customized backdrop background to server
     async function saveBackgroundUrl() {
       const url = document.getElementById('bg-url-input').value.trim();
       const finalUrl = url || "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070";
 
-      // Apply locally immediately for instant feedback
       document.body.style.backgroundImage = `url('${finalUrl}')`;
       localStorage.setItem('3rb_custom_bg_url', finalUrl);
 
@@ -616,7 +613,6 @@
         return;
       }
 
-      // Send to server to update config sheet
       try {
         const response = await fetch(SCRIPT_URL, {
           method: 'POST',
@@ -671,7 +667,6 @@
       btn.innerText = currentLanguage === 'en' ? 'TRANSMITTING...' : 'جاري الإرسال...';
 
       if (!SCRIPT_URL) {
-        // Offline Fallback logic
         const duplicate = players.some(p => p.playerId === pid || p.inGameName.toLowerCase() === ign.toLowerCase());
         if (duplicate) {
           showAlert('duplicate');
@@ -700,7 +695,6 @@
         return;
       }
 
-      // Live Google Sheets API Submit
       try {
         const response = await fetch(SCRIPT_URL, {
           method: 'POST',
@@ -761,6 +755,14 @@
       populateLeaderboard();
     }
 
+    // دالة مساعدة لتسهيل قراءة الحدث بأمان بدون علامات اقتباس مائلة مسببة للمشاكل
+    window.triggerProfileView = function(playerId) {
+      const found = players.find(p => p.id === String(playerId));
+      if (found) {
+        openProfileModal(found);
+      }
+    };
+
     function populateLeaderboard() {
       const list = document.getElementById('leaderboard-rows');
       list.innerHTML = '';
@@ -789,11 +791,13 @@
         let cardStyle = "border-white/10 hover:border-accent/40 bg-black/60";
         if (rank === 1) cardStyle = "border-accent/50 bg-gradient-to-r from-accent/15 via-black/60 to-black/60 shadow-lg shadow-accent/5";
 
-        const viewLabel = currentLanguage === 'en' ? 'View Proof' : 'عرض الإثبات';
-
         const row = document.createElement('div');
         row.className = `flex flex-col sm:flex-row items-center justify-between p-4 rounded-2xl border ${cardStyle} transition gap-4 cursor-pointer`;
-        row.setAttribute('onclick', `openProfileModal(${JSON.stringify(p).replace(/"/g, '&quot;')})`);
+        
+        // استخدام دالة آمنة لحمايتها من الـ Syntax Error في المتصفحات
+        row.onclick = function() {
+          window.triggerProfileView(p.id);
+        };
         
         row.innerHTML = `
           <div class="flex items-center gap-4 w-full sm:w-auto">
@@ -897,7 +901,6 @@
     // Sync match points directly to central Google Sheet
     async function bulkSaveScores() {
       if (!SCRIPT_URL) {
-        // Save local cache offline
         players = players.map(p => {
           if (tempScores[p.id] !== undefined) {
             p.score = tempScores[p.id];
