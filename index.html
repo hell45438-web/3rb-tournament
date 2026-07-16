@@ -4,11 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3rB CHAMPIONS ARENA</title>
-  <!-- Tailwind CSS Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Kufi+Arabic:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   
   <script>
@@ -103,15 +100,11 @@
 </head>
 <body class="relative transition-all duration-700 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070');">
 
-  <!-- Interactive Backdrop Shade Filter -->
   <div class="absolute inset-0 bg-black/60 backdrop-blur-xs pointer-events-none z-0"></div>
 
-  <!-- MAIN WRAPPER -->
   <div class="relative z-10 flex flex-col min-height-screen">
     
-    <!-- HEADER -->
     <header class="w-full flex items-center justify-between p-[15px_20px] md:p-[20px_40px]">
-      <!-- Left side: Language Pill & Live Status -->
       <div class="flex items-center gap-3">
         <div class="flex items-center rounded-full p-0.5 border border-white/20 bg-black/70 backdrop-blur-md">
           <button onclick="setLanguage('en')" id="lang-en-btn" class="px-3.5 py-1.5 text-xs font-black uppercase rounded-full transition-all duration-300">
@@ -127,7 +120,6 @@
         </div>
       </div>
 
-      <!-- Right side: Clean Typography Brand Layout -->
       <div class="flex items-center gap-2.5">
         <span id="header-series" class="hidden sm:inline text-[10px] font-mono text-white/50 uppercase tracking-[0.25em] font-bold">
           CHAMPIONSHIP SERIES
@@ -138,7 +130,6 @@
       </div>
     </header>
 
-    <!-- HERO INTRODUCTION SECTION -->
     <section class="text-center px-4 py-8 md:py-12 flex flex-col items-center">
       <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold italic tracking-tight text-white uppercase text-shadow-heading mb-3">
         3rB CHAMPIONS <span class="text-accent">ARENA</span>
@@ -147,7 +138,6 @@
         Register, submit your inside game credentials, and follow live scores directly synchronized across the globe.
       </p>
 
-      <!-- Stats Pill Grid -->
       <div class="flex flex-wrap justify-center gap-3 text-xs mb-10">
         <div class="flex items-center gap-2 rounded-xl border border-white/20 bg-black/80 px-4 py-2 text-gray-100 shadow-md">
           <i data-lucide="trophy" class="h-4 w-4 text-accent"></i>
@@ -170,10 +160,8 @@
       </div>
     </section>
 
-    <!-- CONTENT PORTAL (REGISTRATION & LEADERBOARD GRID) -->
     <main class="w-full max-w-7xl mx-auto px-4 md:px-8 pb-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- LEFT COLUMN: REGISTRATION FORM CARD -->
       <div class="lg:col-span-5 glass-card rounded-3xl p-6 sm:p-8 relative">
         <div class="text-center mb-6">
           <h2 id="form-title" class="text-2xl font-black tracking-wider text-white mb-2 uppercase italic text-shadow-heading">
@@ -184,11 +172,9 @@
           </p>
         </div>
 
-        <!-- Alert messages -->
         <div id="alert-container" class="hidden mb-4 p-4 rounded-xl text-xs font-bold leading-relaxed"></div>
 
         <form id="reg-form" onsubmit="handleRegistrationSubmit(event)" class="space-y-4">
-          <!-- IGN -->
           <div class="space-y-1.5">
             <label id="lbl-ign" class="text-[10px] uppercase font-black text-gray-200 tracking-wider flex items-center gap-1.5">
               <i data-lucide="user" class="h-3.5 w-3.5 text-accent"></i>
@@ -197,7 +183,6 @@
             <input type="text" id="input-ign" required placeholder="e.g., ShadowSlayer" class="w-full rounded-xl border border-white/20 bg-black/60 px-4 py-3 text-sm text-white placeholder-gray-400 focus:border-accent focus:bg-black focus:outline-none focus:ring-2 focus:ring-accent/40 transition">
           </div>
 
-          <!-- Player ID -->
           <div class="space-y-1.5">
             <label id="lbl-id" class="text-[10px] uppercase font-black text-gray-200 tracking-wider flex items-center gap-1.5">
               <i data-lucide="hash" class="h-3.5 w-3.5 text-accent"></i>
@@ -206,7 +191,6 @@
             <input type="text" id="input-id" required placeholder="e.g., 58493729" class="w-full rounded-xl border border-white/20 bg-black/60 px-4 py-3 text-sm text-white placeholder-gray-400 focus:border-accent focus:bg-black focus:outline-none focus:ring-2 focus:ring-accent/40 transition">
           </div>
 
-          <!-- Discord -->
           <div class="space-y-1.5">
             <label id="lbl-discord" class="text-[10px] uppercase font-black text-gray-200 tracking-wider flex items-center gap-1.5">
               <i data-lucide="disc" class="h-3.5 w-3.5 text-accent"></i>
@@ -215,7 +199,6 @@
             <input type="text" id="input-discord" required placeholder="e.g., warrior#1234" class="w-full rounded-xl border border-white/20 bg-black/60 px-4 py-3 text-sm text-white placeholder-gray-400 focus:border-accent focus:bg-black focus:outline-none focus:ring-2 focus:ring-accent/40 transition">
           </div>
 
-          <!-- SCREENSHOT FILE UPLOAD (Converts to Base64) -->
           <div class="space-y-1.5">
             <label id="lbl-screenshot" class="text-[10px] uppercase font-black text-gray-200 tracking-wider flex items-center gap-1.5">
               <i data-lucide="image" class="h-3.5 w-3.5 text-accent"></i>
@@ -243,14 +226,12 @@
             </p>
           </div>
 
-          <!-- Submit Button -->
           <button type="submit" id="btn-submit" class="w-full py-4 mt-4 btn-gold rounded-xl flex items-center justify-center gap-2">
             SUBMIT ENTRY
           </button>
         </form>
       </div>
 
-      <!-- RIGHT COLUMN: CHAMPIONS LEADERBOARD GRID -->
       <div class="lg:col-span-7 glass-card rounded-3xl p-6 sm:p-8">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
           <div class="text-center sm:text-left">
@@ -262,22 +243,18 @@
             </p>
           </div>
 
-          <!-- Search Input -->
           <div class="relative w-full sm:w-64">
             <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Search champions..." class="w-full rounded-xl border border-white/20 bg-black/60 py-2.5 pl-10 pr-4 text-xs text-white placeholder-gray-400 focus:border-accent focus:outline-none transition">
             <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-300"></i>
           </div>
         </div>
 
-        <!-- Leaderboard Rows Container -->
         <div id="leaderboard-rows" class="space-y-3 max-h-[580px] overflow-y-auto pr-1">
-          <!-- Dynamically populated rows -->
-        </div>
+          </div>
       </div>
     </main>
   </div>
 
-  <!-- ADMIN PASS MODAL -->
   <div id="admin-auth-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
     <div class="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 relative">
       <button onclick="closeAdminModal()" class="absolute top-4 right-4 rounded-xl border border-white/20 bg-black/60 p-2 text-gray-300 hover:text-white cursor-pointer">
@@ -309,7 +286,6 @@
     </div>
   </div>
 
-  <!-- FULL ADMIN PANEL CONTROL MODAL -->
   <div id="admin-panel-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 z-50">
     <div class="glass-card w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl p-6 sm:p-8 relative">
       <button onclick="closeAdminPanel()" class="absolute top-4 right-4 rounded-xl border border-white/20 bg-black/60 p-2 text-gray-300 hover:text-white cursor-pointer z-10">
@@ -326,9 +302,7 @@
         </div>
       </div>
 
-      <!-- Quick Setup Settings Inside Panel -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <!-- Live Database Connector -->
         <div class="rounded-2xl border border-white/10 bg-black/60 p-4 space-y-2">
           <label class="text-[10px] font-black uppercase text-accent tracking-widest flex items-center gap-1.5">
             <i data-lucide="database" class="h-3.5 w-3.5"></i>
@@ -340,7 +314,6 @@
           </button>
         </div>
 
-        <!-- Layout Theme Manager -->
         <div class="rounded-2xl border border-white/10 bg-black/60 p-4 space-y-2">
           <label class="text-[10px] font-black uppercase text-accent tracking-widest flex items-center gap-1.5">
             <i data-lucide="image" class="h-3.5 w-3.5"></i>
@@ -353,7 +326,6 @@
         </div>
       </div>
 
-      <!-- Live Player Management Table -->
       <div class="overflow-x-auto w-full mb-6">
         <table class="w-full text-left text-xs border-collapse">
           <thead>
@@ -366,12 +338,10 @@
             </tr>
           </thead>
           <tbody id="admin-table-body" class="divide-y divide-white/5">
-            <!-- Populated via JS -->
-          </tbody>
+            </tbody>
         </table>
       </div>
 
-      <!-- Action Panel Bottom Row -->
       <div class="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6">
         <button onclick="bulkSaveScores()" class="px-8 py-3.5 btn-gold rounded-xl text-xs font-black tracking-widest cursor-pointer">
           SYNC ALL GRADES TO GOOGLE SHEET
@@ -389,7 +359,6 @@
     </div>
   </div>
 
-  <!-- PLAYER DETAIL PROFILE MODAL -->
   <div id="player-profile-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50">
     <div class="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 relative">
       <button onclick="closeProfileModal()" class="absolute top-4 right-4 rounded-xl border border-white/20 bg-black/60 p-2 text-gray-300 hover:text-white cursor-pointer">
@@ -419,7 +388,6 @@
             <span id="prof-score" class="text-xs font-black text-white">0 / 10</span>
           </div>
 
-          <!-- Proof Image Review Container -->
           <div class="rounded-xl bg-black/50 p-4 border border-white/10 space-y-2">
             <span class="text-[10px] font-black text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
               <i data-lucide="shield-check" class="h-3.5 w-3.5 text-accent"></i> Verified Inside-Game Screenshot
@@ -435,7 +403,6 @@
     </div>
   </div>
 
-  <!-- SCRIPTS & LIVE DATABASE ENGINE -->
   <script>
     // Live DB Connector Endpoint
     let SCRIPT_URL = localStorage.getItem('3rb_custom_script_url') || '';
@@ -476,7 +443,7 @@
 
     // Initialize Page
     function init() {
-      // Load stored custom background if any (Fast loading)
+      // Load stored custom background if any
       const savedBg = localStorage.getItem('3rb_custom_bg_url');
       if (savedBg) {
         document.body.style.backgroundImage = `url('${savedBg}')`;
@@ -490,7 +457,7 @@
       fetchLiveRecords();
       lucide.createIcons();
 
-      // Start background polling
+      // Start background polling to ensure everyone sees the same sheet updates
       setInterval(fetchLiveRecords, 10000);
     }
 
@@ -528,7 +495,7 @@
       populateLeaderboard();
     }
 
-    // Image file handler
+    // Image file handler -> Converts to Base64 String
     const fileInput = document.getElementById('file-input');
     const dropZone = document.getElementById('drop-zone');
     const previewContainer = document.getElementById('preview-container');
@@ -567,24 +534,17 @@
       previewContainer.classList.add('hidden');
     }
 
-    // Fetch live entries
+    // Fetch live entries from connected Google Sheet Web App Script
     async function fetchLiveRecords() {
       if (!SCRIPT_URL) return;
       try {
         const res = await fetch(SCRIPT_URL);
         if (!res.ok) throw new Error('Network error');
         const data = await res.json();
-        
         if (data && Array.isArray(data.players)) {
           players = data.players;
           populateLeaderboard();
           updateStatsAndBadge();
-        }
-        
-        if (data && data.backgroundUrl) {
-          document.body.style.backgroundImage = `url('${data.backgroundUrl}')`;
-          localStorage.setItem('3rb_custom_bg_url', data.backgroundUrl);
-          document.getElementById('bg-url-input').value = data.backgroundUrl;
         }
       } catch (err) {
         console.error('Google Sheet background fetch failed:', err);
@@ -600,39 +560,20 @@
       fetchLiveRecords();
     }
 
-    // Save customized backdrop background to server
-    async function saveBackgroundUrl() {
+    function saveBackgroundUrl() {
       const url = document.getElementById('bg-url-input').value.trim();
-      const finalUrl = url || "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070";
-
-      document.body.style.backgroundImage = `url('${finalUrl}')`;
-      localStorage.setItem('3rb_custom_bg_url', finalUrl);
-
-      if (!SCRIPT_URL) {
-        alert('Custom Background Applied Locally (Offline Fallback)!');
-        return;
-      }
-
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'updateBackground',
-            backgroundUrl: finalUrl
-          })
-        });
-        const data = await response.json();
-        if (data.status === 'success') {
-          alert('Arena Backdrop Synchronized & Live Across All Connected Devices! 🚀');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Failed to sync backdrop to Google Sheets database.');
+      if (url) {
+        document.body.style.backgroundImage = `url('${url}')`;
+        localStorage.setItem('3rb_custom_bg_url', url);
+        alert('Custom Background Applied Successfully!');
+      } else {
+        localStorage.removeItem('3rb_custom_bg_url');
+        document.body.style.backgroundImage = "url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070')";
+        alert('Reset to Default Arena Background!');
       }
     }
 
+    // Update Stats and Badge statuses
     function updateStatsAndBadge() {
       document.getElementById('stats-count').innerText = players.length;
       
@@ -667,6 +608,7 @@
       btn.innerText = currentLanguage === 'en' ? 'TRANSMITTING...' : 'جاري الإرسال...';
 
       if (!SCRIPT_URL) {
+        // Offline Fallback logic
         const duplicate = players.some(p => p.playerId === pid || p.inGameName.toLowerCase() === ign.toLowerCase());
         if (duplicate) {
           showAlert('duplicate');
@@ -695,6 +637,7 @@
         return;
       }
 
+      // Live Google Sheets API Submit
       try {
         const response = await fetch(SCRIPT_URL, {
           method: 'POST',
@@ -755,14 +698,6 @@
       populateLeaderboard();
     }
 
-    // دالة مساعدة لتسهيل قراءة الحدث بأمان بدون علامات اقتباس مائلة مسببة للمشاكل
-    window.triggerProfileView = function(playerId) {
-      const found = players.find(p => p.id === String(playerId));
-      if (found) {
-        openProfileModal(found);
-      }
-    };
-
     function populateLeaderboard() {
       const list = document.getElementById('leaderboard-rows');
       list.innerHTML = '';
@@ -791,13 +726,13 @@
         let cardStyle = "border-white/10 hover:border-accent/40 bg-black/60";
         if (rank === 1) cardStyle = "border-accent/50 bg-gradient-to-r from-accent/15 via-black/60 to-black/60 shadow-lg shadow-accent/5";
 
+        const viewLabel = currentLanguage === 'en' ? 'View Proof' : 'عرض الإثبات';
+
         const row = document.createElement('div');
         row.className = `flex flex-col sm:flex-row items-center justify-between p-4 rounded-2xl border ${cardStyle} transition gap-4 cursor-pointer`;
         
-        // استخدام دالة آمنة لحمايتها من الـ Syntax Error في المتصفحات
-        row.onclick = function() {
-          window.triggerProfileView(p.id);
-        };
+        // ربط حدث الضغط بالدالة برمجياً لمنع أخطاء الـ Syntax Error
+        row.onclick = function() { openProfileModal(p); };
         
         row.innerHTML = `
           <div class="flex items-center gap-4 w-full sm:w-auto">
@@ -901,6 +836,7 @@
     // Sync match points directly to central Google Sheet
     async function bulkSaveScores() {
       if (!SCRIPT_URL) {
+        // Save local cache offline
         players = players.map(p => {
           if (tempScores[p.id] !== undefined) {
             p.score = tempScores[p.id];
